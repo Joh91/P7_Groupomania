@@ -3,12 +3,16 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
+// importation de bodyParser 
+const bodyParser = require('body-parser')
+app.use(bodyParser.json());
+
 //importation dotenv
 require('dotenv').config({path: "./config/.env"});
 
 // importation des routes 
 const userRoutes = require('./routes/user');
-const postRoutes = require('./routes/post');
+
 
 
 
@@ -33,7 +37,6 @@ mongoose.connect(`mongodb+srv://johann:wG2Lj4XD3sDFQBRh@cluster0.gl34dzj.mongodb
 
 
 // router 
-app.use('/api/post', postRoutes)
-app.use('/api/user', userRoutes)
+app.use('/api/auth', userRoutes)
   
 module.exports = app;

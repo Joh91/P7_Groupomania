@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema({
         bio: {type: String, max: 1000},
         followers: {type: [String]},
         following: {type: [String]}, 
-        like: {type: number}, 
+        like: {type: Number}, 
         userLike: {type: [String]},
     }, 
     {

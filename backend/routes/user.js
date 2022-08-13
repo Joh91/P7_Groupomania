@@ -9,6 +9,6 @@ router.post('/signup', userCtrl.signup)
 // router.post('/login',  userCtrl.login);
 
 router.get('/', userProfilCtrl.getAllUsers); 
-router.get('/:id', userProfilCtrl.getUserInfo)
+router.get('/:id', userProfilCtrl.getOneUser)
 
 module.exports = router; 

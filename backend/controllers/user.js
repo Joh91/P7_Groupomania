@@ -6,23 +6,18 @@ const bcrypt = require('bcrypt');
 const cryptoJs = require('crypto-js'); 
 
 
-
-
-
-
 /*------- Process Signup -------*/
 exports.signup = (req, res, next) => {
     //Utilisation de regex pour sécuriser les champs de saisie et assurer un mdp fort 
     //au moins 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
     const regexPassword = (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/);
-
-    if (regexPassword.test(req.body.password)){
+    const regexEmail = (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+    // contrôle des champs saisis 
+    if (regexPassword.test(req.body.password) && regexEmail.test(req.body.email)){
         //chiffrage de l'adresse-mail
-        const emailCryptoJs = cryptojs.SHA256(req.body.email, process.env.SECRET_KEYS).toString();
-
+        const emailCryptoJs = cryptoJs.SHA256(req.body.email, process.env.SECRET_KEYS).toString();
         // configuration de bcrypt pour hasher le mdp
         bcrypt.hash(req.body.password, 10)
-        
         .then(hash => {
             // création de l'objet à conserver dans la bdd 
             const user = new User({
@@ -39,7 +34,6 @@ exports.signup = (req, res, next) => {
     }
     // Si la saisie des champs ne respecte pas notre condition 
     else {
-        return res.status(401).json({ message: 'Veuillez saisir une adresse mail valide et un mot de passe contenant au moins 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre et un 1 caractère spécial' });
+        return res.status(400).json({ message: 'Veuillez saisir une adresse mail valide et un mot de passe contenant au moins 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre et un 1 caractère spécial' });
     }
-    
 }

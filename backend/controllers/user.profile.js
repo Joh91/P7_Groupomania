@@ -1,5 +1,4 @@
 const User = require('../models/User'); 
-const ObjectID = require('mongoose').Types.ObjectId; 
 
 /*---- requête Get pour afficher tous les users -----*/ 
 exports.getAllUsers = (req, res, next) => {

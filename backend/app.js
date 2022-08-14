@@ -11,10 +11,8 @@ app.use(bodyParser.json());
 require('dotenv').config({path: "./config/.env"});
 
 // importation des routes 
-const userRoutes = require('./routes/user');
-
-
-
+const userRoutes = require('./routes/user.auth');
+const userProfile = require('./routes/user.profile');
 
 
 /*----- Securité -----*/
@@ -37,6 +35,7 @@ mongoose.connect(`mongodb+srv://johann:wG2Lj4XD3sDFQBRh@cluster0.gl34dzj.mongodb
 
 
 // router 
-app.use('/api/auth', userRoutes)
+app.use('/api/auth', userRoutes);
+app.use('/api/user', userProfile); 
   
 module.exports = app;

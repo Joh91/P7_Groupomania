@@ -25,7 +25,37 @@ exports.createPosts = (req, res, next) => {
 /*---- requête Get ----*/ 
 exports.getPosts = (req, res, next) => {
     //Affichage des posts
-    User.find()
+    Posts.find()
     .then((posts) => {res.status(200).json(posts)})
     .catch((error) => {res.status(400).json({error})})
+};
+
+/*---- requête PUT ----*/ 
+exports.updatePosts = (req, res, next) => {
+    Posts.findOneAndUpdate(
+        // recherche de l'id dans la bdd 
+        {_id: req.params.id}, 
+        // modification de la bio 
+        {$set: {message : req.body.message, _id: req.params.id}},
+        (err, data) => {
+            // si aucune erreur les données sont envoyées 
+            if(!err) return res.send(data); 
+            // si une erreur un message d'erreur est retourné
+            if (err) return res.status(500).send({ err });
+        }
+    )
+}; 
+
+
+/*---- requête DELETE ----*/ 
+exports.deletePosts = (req, res, next) => {
+    Posts.findOne({_id: req.params.id})
+    .then (post => {
+        post.deleteOne({_id: req.params.id})
+        .then(() => {res.status(200).json({message: "post supprimé !"})})
+        .catch(error => res.status(400).json({ error }));
+    })
+    .catch ((error) => {
+        res.status(500).json({error}); 
+    })
 };

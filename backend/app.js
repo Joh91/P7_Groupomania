@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 
 //connexion à la database
 const mongoose = require('mongoose'); 
-mongoose.connect(`mongodb+srv://johann:wG2Lj4XD3sDFQBRh@cluster0.gl34dzj.mongodb.net/?retryWrites=true&w=majority`,
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.gl34dzj.mongodb.net/?retryWrites=true&w=majority`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))

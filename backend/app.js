@@ -13,7 +13,10 @@ require('dotenv').config({path: "./config/.env"});
 // importation des routes 
 const userRoutes = require('./routes/user.auth');
 const userProfile = require('./routes/user.profile');
+const posts = require('./routes/posts')
 
+// importation path 
+const path = require('path')
 
 /*----- Securité -----*/
 //contrôle d'accès
@@ -35,7 +38,9 @@ mongoose.connect(`mongodb+srv://johann:wG2Lj4XD3sDFQBRh@cluster0.gl34dzj.mongodb
 
 
 // router 
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes);
 app.use('/api/user', userProfile); 
+app.use('/api/posts', posts);
   
 module.exports = app;

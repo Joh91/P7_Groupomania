@@ -13,7 +13,7 @@ exports.createPosts = (req, res, next) => {
         like: req.body.like, 
         likers: [],
         userId: req.auth.userId,
-        // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     }); 
     // post enregistré
     console.log(post)
@@ -24,10 +24,10 @@ exports.createPosts = (req, res, next) => {
 
 /*---- requête Get ----*/ 
 exports.getPosts = (req, res, next) => {
-    //Affichage des posts
-    Posts.find()
+    //Affichage des posts par ordre chronologique
+    Posts.find().sort({ createdAt: -1})
     .then((posts) => {res.status(200).json(posts)})
-    .catch((error) => {res.status(400).json({error})})
+    .catch((error) => {res.status(400).json({error})});
 };
 
 /*---- requête PUT ----*/ 

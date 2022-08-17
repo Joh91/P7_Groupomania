@@ -59,3 +59,26 @@ exports.deletePosts = (req, res, next) => {
         res.status(500).json({error}); 
     })
 };
+
+
+/*----- requête Get like -----*/ 
+exports.getLikes = (req, res, next) => {
+    // récupération du post à liker
+    Posts.find({_id: req.params.id})
+    .then((post) => {
+        // l'utilisateur n'a pas encore liké, userId ne se trouve pas dans l'array Likers 
+        if(!post.likers.includes(req.body.userId)){
+            // Update de la valeur de like et ajout de l'userId dans array Likers
+            Posts.updateOne({_id: req.params.id}, {$inc: {like: +1}, $push: {likers: req.body.userId}})
+            .then(() => res.status(200).json({message: "post liké"}))
+            .catch((error) => res.status(400).json({error}));
+            
+            // Utilisateur annule son like
+        } else if (post.likers.includes(req.body.userId) && req.body.like === 0){
+            // Update de la valeur de like et ajout de l'userId dans array Likers
+            Posts.updateOne({_id: req.params.id}, {$inc: {like: -1}, $push: {likers: req.body.userId}})
+            .then(() => res.status(200).json({message: "like retiré"}))
+            .catch((error) => res.status(400).json({error}));
+        }
+    })
+}

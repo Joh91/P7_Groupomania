@@ -18,23 +18,29 @@ exports.getOneUser = (req, res, next) => {
 
 /*---- requête Put pour modifier le profil ----*/
 exports.updateUser = (req, res, next) => {
-    try {
-        User.findOneAndUpdate(
-            // recherche de l'id dans la bdd 
-            {_id: req.params.id}, 
-            // modification de la bio 
-            {$set: {bio : req.body.bio, _id: req.params.id}},
-            (err, data) => {
-                // si aucune erreur les données sont envoyées 
-                if(!err) return res.send(data); 
-                // si une erreur un message d'erreur est retourné
-                if (err) return res.status(500).send({ err });
-            })
-    } catch (err) {
-        return res.status(500).json({ err });
-    } 
+    // définition de l'object comprenant les nouvelles valeurs 
+    const userObject = {
+        bio: req.body.bio,
+        pseudo: req.body.pseudo,
+    }
+
+    // recherche de l'id dans la bdd 
+    // Object retourné vers la BDD
+    User.findByIdAndUpdate(
+        req.params.id, 
+        {$set: userObject }, 
+        (error, docs) => {
+            if(!error){
+                res.send(docs);
+            } else {
+                res.status(400).json(error); 
+            }
+        }
+    )
+    console.log(userObject);
 }; 
 
+/* --- Requête DELETE pour supprimer un profil --- */ 
 exports.deleteUser = (req, res, next) => {
     User.findOne({_id: req.params.id})
     .then (user => {
@@ -45,4 +51,4 @@ exports.deleteUser = (req, res, next) => {
     .catch ((error) => {
         res.status(500).json({error}); 
     })
-}
+};

@@ -5,7 +5,8 @@ const uniqueValidator = require("mongoose-unique-validator");
 
 //définition des modèles Users afin d'enregistrer les données dans la database
 const userSchema = mongoose.Schema({
-        pseudo: {type: String, required: true, minLength: 3, maxLength: 25, unique: true, trimp: true},
+        isAdmin: {type: Boolean, default: false},
+        pseudo: {type: String, required: true, minLength: 3, maxLength: 25, unique: true},
         email: {type: String, required: true, unique: true, lowercase: true},
         password: {type: String, required: true },
         imageUrl: {type: String},

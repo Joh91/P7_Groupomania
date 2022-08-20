@@ -13,10 +13,10 @@ require('dotenv').config({path: "./config/.env"});
 // importation des routes 
 const userRoutes = require('./routes/user.auth');
 const userProfile = require('./routes/user.profile');
-const posts = require('./routes/posts')
+const posts = require('./routes/posts');
 
 // importation path 
-const path = require('path')
+const path = require('path');
 
 /*----- Securité -----*/
 //contrôle d'accès

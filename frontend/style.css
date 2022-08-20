@@ -1,0 +1,148 @@
+body {
+    margin: 0; 
+    padding: 0; 
+    background: linear-gradient(356deg, rgba(255,215,215,1) 0%, rgba(253,45,1,0.5914740896358543) 92%); 
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+}
+
+/* homepage connexion */ 
+.logo {
+    display: flex; 
+    justify-content: center;
+}
+
+.logo img {
+    width: 20%; 
+}
+
+.formulaire {
+    background: #fff; 
+    margin: 0 400px; 
+    padding: 60px 20px; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.form-title {
+    color: #FD2D01;
+    margin-bottom: 20px; 
+}
+
+.formulaire p {
+    text-align: center;
+    padding-bottom: 20px; 
+}
+
+.signup {
+    text-decoration: none;
+    
+}
+
+/*-- homepage reseau social --*/ 
+nav {
+    background-color: white;
+    display: flex; 
+    justify-content: center;
+    align-items: baseline;
+    padding: 20px 0 30px
+
+}
+
+nav img {
+    width: 20%; 
+}
+
+nav a {
+    text-decoration: none;
+    color: grey;
+    margin-right: 20px; 
+    
+    
+}
+
+nav a:hover {
+    color:#FD2D01;
+    cursor: pointer; 
+}
+
+
+/* Create post */ 
+main {
+    margin: 100px 150px 60px; 
+}
+
+.add-post {
+    background: white; 
+    padding: 50px; 
+    border-radius: 15px;
+}
+
+.add-post h2 {
+    font-size: 24px;
+    color:#FD2D01;
+}
+
+.head {
+    display: flex; 
+    gap: 15px; 
+    justify-content: baseline;
+    margin: 40px 0 0;
+    padding: 10px; 
+    border-radius: 15px 15px 0 0;
+    background-color: #faebeb;
+}
+
+.head h3 {
+    font-size: 18px;
+}
+
+.head h4 {
+    font-size: 14px;
+    align-self: center;
+}
+
+
+.card {
+    height: 200px;
+}
+
+.card img {
+    height: 150px; 
+    object-fit: cover;
+}
+
+.foot {
+    display: flex; 
+    justify-content: space-between; 
+    gap: 50px; 
+}
+
+.foot i {
+    padding: 10px; 
+    border: 1px solid #FFD7D7;
+    border-radius: 50px; 
+    background: #FFD7D7;
+}
+
+.foot i:hover{
+    background:#FD2D01; 
+    color: white; 
+}
+
+/* Get posts */
+.get-post {
+    background: white; 
+    padding: 50px; 
+    margin-top: 80px; 
+    border-radius: 15px; 
+}
+
+.get-post h2 {
+    font-size: 24px;
+    color:#FD2D01;
+}

@@ -32,18 +32,31 @@ exports.getPosts = (req, res, next) => {
 
 /*---- requête PUT ----*/ 
 exports.updatePosts = (req, res, next) => {
-    Posts.findOneAndUpdate(
-        // recherche de l'id dans la bdd 
-        {_id: req.params.id}, 
-        // modification de la bio 
-        {$set: {message : req.body.message, _id: req.params.id}},
-        (err, data) => {
-            // si aucune erreur les données sont envoyées 
-            if(!err) return res.send(data); 
-            // si une erreur un message d'erreur est retourné
-            if (err) return res.status(500).send({ err });
+    //valeurs à modifier; "req files ? " vérifie si un fichier est présent
+  //1er cas: fichier présent
+  const postObject = req.file 
+  ? {
+    message: req.body.message,
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  } //2e cas: pas de fichier présent
+  : {message: req.body.message}; 
+
+  Posts.findByIdAndUpdate(req.params.id, {$set: postObject, _id: req.params.id})
+  .then((post) => {
+        //auth
+        if (post.userId === req.auth.userId || User.body.isAdmin === true){
+            //récupération du fichier précédent et suppression
+            let oldFile = post.imageUrl.split('images/')[1];
+            fs.unlink(`images/${oldFile}`, () => {
+            res.status(200).json({message: "Post modifié !"})}) 
+            console.log(postObject); 
+        } else {
+            res.status(401).json({ message : "Non-autorisé"});
         }
-    )
+    })
+  .catch((error) => {
+        res.status(400).json({error}); 
+    })
 }; 
 
 
@@ -77,7 +90,7 @@ exports.getLikes = (req, res, next) => {
         } else if (post.likers.includes(req.body.userId) && req.body.like === 0){
             // Update de la valeur de like et ajout de l'userId dans array Likers
             Posts.updateOne({_id: req.params.id}, {$inc: {like: -1}, $push: {likers: req.body.userId}})
-            .then(() => res.status(200).json({message: "like retiré"}))
+            .then(() => res.status(200).json({message: "post liké"}))
             .catch((error) => res.status(400).json({error}));
         }
     })

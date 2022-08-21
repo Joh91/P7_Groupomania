@@ -20,6 +20,7 @@ body {
 
 .formulaire {
     background: #fff; 
+    max-width: 700px; 
     margin: 0 400px; 
     padding: 60px 20px; 
     display: flex; 

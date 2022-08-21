@@ -1,12 +1,8 @@
 <template>
-  <div>
-    <nav>
-      <router-link to="/">Accueil</router-link>
-      <router-link to="/page1">Page1</router-link>
-      <router-link to="/page2">Page2</router-link>
-    </nav>
+  <div id ="connexion">
     <router-view />
   </div>
+  
 </template>
 
 <script>
@@ -23,5 +19,14 @@ export default {
 </script>
 
 <style>
-
+  @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+   #app {
+  font-family: 'Lato', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+  margin-top: 60px; 
+  display: flex; 
+  justify-content: center;
+}
 </style>

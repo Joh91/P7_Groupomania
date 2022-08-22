@@ -6,19 +6,28 @@
             <h1 v-if="mode == 'login'">Connexion</h1>
             <!-- sinon retourne ce titre si inscription -->
             <h1 v-else>Inscription</h1>
-            <p>
-                Vous n'avez pas de compte ?
-                <span class='signUp' @click="switchToCreateAccount()">Inscrivez-vous</span>
-            </p>
-            <Form/>
+            <div v-if="mode == 'login'">
+                <p class="nav-connexion">
+                    Vous n'avez pas de compte ?
+                    <span class='signUp' @click="switchToCreateAccount()">Inscrivez-vous</span>
+                </p>
+                <FormLogin/>
+            </div>
+            <div v-else>
+                <p class="nav-connexion">
+                    Vous avez déjà un compte ?
+                    <span class='signUp' @click="switchToLogin()">Connectez-vous</span>
+                </p>
+                <FormCreate/>
+            </div>   
         </main>
     </div>
-    
 </template>
 
 <script>
 
-import Form from '@/components/Form.vue'
+import FormLogin from '@/components/Form-login.vue'
+import FormCreate from '@/components/Form-create.vue'
 
 
 
@@ -39,7 +48,8 @@ export default ({
         }
     },
     components: {
-        Form
+        FormLogin, 
+        FormCreate
     }
 })
 </script>
@@ -64,6 +74,7 @@ export default ({
         flex-direction: column;
         align-items: center; 
         padding: 50px 40px; 
+        margin-bottom: 100px; 
         border-radius: 40px; 
     }
 
@@ -83,6 +94,10 @@ export default ({
     img {
         width: 35%; 
 
+    }
+
+    .nav-connexion {
+        text-align: center;
     }
 
 </style>

@@ -4,11 +4,11 @@
         <form>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                <input v-model="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Mot de passe</label>
-                <input type="password" class="form-control" id="password">
+                <input v-model="password" type="password" class="form-control" id="password">
             </div>
             <button type="submit" class="btn btn-primary">Se connecter</button>
         </form>
@@ -19,7 +19,14 @@
 <script>
 
 export default ({
-    name: "Form"
+    name: "Form-login", 
+    data: function (){
+        return {
+            email: 'email',
+            password: 'password',
+        }
+    },
+   
 })
 </script>
 

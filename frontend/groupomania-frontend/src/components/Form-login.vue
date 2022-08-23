@@ -1,32 +1,49 @@
 <template>
   
     <div class="col-12">
-        <form>
+        <form @submit="postLogin">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input v-model="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                <input type="email" class="form-control" id="email" v-model="dataLogin.email" aria-describedby="emailHelp">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Mot de passe</label>
-                <input v-model="password" type="password" class="form-control" id="password">
+                <input  type="password" class="form-control" id="password" v-model="dataLogin.password">
             </div>
-            <button type="submit" class="btn btn-primary">Se connecter</button>
+            <button type="submit" class="btn btn-primary" >Se connecter</button>
         </form>
     </div>
 
 </template>
 
 <script>
+import axios from 'axios'
 
 export default ({
     name: "Form-login", 
-    data: function (){
+    data(){
         return {
-            email: 'email',
-            password: 'password',
+            // modèle des données à expédier
+            dataLogin: {
+                email: null,
+                password: null
+            }
         }
-    },
-   
+    }, 
+    methods: {
+        // requête Post - envoi des données de connexion 
+        postLogin(e) {
+            axios.post("http://localhost:3000/api/auth/login", this.dataLogin)
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+            e.preventDefault();
+        }
+    }
+    
 })
 </script>
 

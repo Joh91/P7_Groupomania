@@ -9,6 +9,7 @@ const userSchema = mongoose.Schema({
         pseudo: {type: String, required: true, minLength: 3, maxLength: 25, unique: true},
         email: {type: String, required: true, unique: true, lowercase: true},
         password: {type: String, required: true },
+        confirmPassword: {type: String, required: true}, 
         imageUrl: {type: String},
         bio: {type: String, max: 1000},
         followers: {type: [String]},

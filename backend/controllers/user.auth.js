@@ -25,11 +25,16 @@ exports.signup = (req, res, next) => {
                 pseudo: req.body.pseudo,
                 email: emailCryptoJs,
                 password: hash,
+                confirmPassword: req.body.confirmPassword
             }); 
             // user enregistré dans la bdd
-            user.save()
-            .then(() => res.status(201).json({ message: "Utilisateur crée !"})) 
-            .catch(error => res.status(400).json({error})); 
+            if(User.password === User.confirmPassword){
+                user.save()
+                .then(() => res.status(201).json({ message: "Utilisateur crée !"})) 
+                .catch(error => res.status(400).json({error})); 
+            } else {
+                res.status(400).json({message: 'mot de passe et confirmation de mot de passe différent'})
+            }
         })
         .catch(error => res.status(500).json({error}))
     }

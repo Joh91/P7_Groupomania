@@ -25,8 +25,8 @@ export default ({
         return {
             // modèle des données à expédier
             dataLogin: {
-                email: null,
-                password: null
+                email: '',
+                password: ''
             }
         }
     }, 
@@ -35,7 +35,7 @@ export default ({
         postLogin(e) {
             axios.post("http://localhost:3000/api/auth/login", this.dataLogin)
             .then((response) => {
-                console.log(response)
+                localStorage.setItem('token', response.data.token);
             })
             .catch((error) => {
                 console.log(error)

@@ -8,17 +8,26 @@
             </div>
             <div>
                 <a href="#">Accueil</a>
+                <a href="#">Utilisateurs</a>
                 <a href="profil.html">Profil</a>
-                <a class="logout" href="#">Déconnexion</a>
+                <span class="logout" @click="logout()">Déconnexion</span>
             </div>
         </nav>
     </header>
 </template>
 
 <script>
-
 export default ({
-    
+    name: "Header",
+    methods: {
+        /* --  methode de deconnexion -- 
+        1. suppression du token présent dans le localstorage
+        2. retour à la page de connexion */
+        logout () {
+            localStorage.removeItem('token');
+            this.$router.push('/')
+        }
+    }
 })
 </script>
 
@@ -61,6 +70,7 @@ nav a:hover {
 .logout:hover {
     color: #fff; 
     background: #FD2D01;
+    cursor: pointer;
 }
 
 </style>

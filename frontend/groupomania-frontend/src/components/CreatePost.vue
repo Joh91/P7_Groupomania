@@ -22,9 +22,18 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 export default ({
-    name: "CreatePost"
+    name: "CreatePost", 
+    data(){
+        return {
+            pseudo: "", 
+        }
+    }, 
+
+    methods: {
+        
+    }
 })
 </script>
 

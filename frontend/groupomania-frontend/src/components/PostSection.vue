@@ -1,9 +1,18 @@
 <template>
     <section class="get-post">
-            <h2>Derniers posts publiés</h2>
+            <div class="head">
+                <div class="title">
+                    <h2>Bonjour (...)</h2>
+                    <h3>Voici les derniers posts publiés</h3>
+                </div>
+                <div class= "add-post">
+                    <span>Ajouter un post</span>
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+            </div>
 
             <div class= "post">
-                <div class="head">
+                <div class="head-post">
                     <h3>Thomas 35</h3>
                     <h4>Publié il y a 2h</h4>
                 </div>
@@ -36,18 +45,55 @@ export default ({
 .get-post {
     background: white; 
     padding: 50px; 
-    margin-top: 80px; 
+    margin: 60px auto; 
     border-radius: 15px; 
     width: 90%; 
 }
 
 .get-post h2 {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
     color:#FD2D01;
 }
 
+.get-post h3 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
 .head {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-post {
+    display: flex; 
+    gap: 20px; 
+}
+
+.add-post span {
+    align-self: center;
+    font-weight: bold;
+    color: #4E5166; 
+
+}
+
+.fa-pen-to-square {
+    font-size: 20px; 
+    border-radius: 50px; 
+    padding: 10px; 
+    background: #4E5166; 
+    color: #fff; 
+}
+
+.fa-pen-to-square:hover  { 
+    background: #FD2D01; 
+    color: #fff; 
+}
+
+.head-post {
     display: flex; 
     gap: 15px; 
     justify-content: space-between;
@@ -57,12 +103,12 @@ export default ({
     background-color: #faebeb;
 }
 
-.head h3 {
+.head-post h3 {
     font-size: 20px;
     font-weight: bold;
 }
 
-.head h4 {
+.head-post h4 {
     font-size: 12px; 
 }
 

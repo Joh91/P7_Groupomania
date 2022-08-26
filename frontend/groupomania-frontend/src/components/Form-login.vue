@@ -1,7 +1,7 @@
 <template>
   
     <div class="col-12">
-        <form @submit="postLogin">
+        <form >
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" v-model="dataLogin.email" aria-describedby="emailHelp">
@@ -10,7 +10,7 @@
                 <label for="password" class="form-label">Mot de passe</label>
                 <input  type="password" class="form-control" id="password" v-model="dataLogin.password">
             </div>
-            <button type="submit" class="btn btn-primary" >Se connecter</button>
+            <button type="submit" class="btn btn-primary" @click="postLogin">Se connecter</button>
         </form>
     </div>
 
@@ -33,14 +33,17 @@ export default ({
     methods: {
         // requête Post - envoi des données de connexion 
         postLogin(e) {
+            e.preventDefault()
             axios.post("http://localhost:3000/api/auth/login", this.dataLogin)
             .then((response) => {
                 localStorage.setItem('token', response.data.token);
+                this.$router.push('/home');
             })
             .catch((error) => {
                 console.log(error)
             })
-            e.preventDefault();
+            console.log(e)
+            
         }
     }
     

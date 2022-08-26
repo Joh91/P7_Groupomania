@@ -9,6 +9,7 @@
             <div>
                 <a href="#">Accueil</a>
                 <a href="profil.html">Profil</a>
+                <a class="logout" href="#">Déconnexion</a>
             </div>
         </nav>
     </header>
@@ -47,6 +48,19 @@ nav a {
 nav a:hover {
     color:#FD2D01;
     cursor: pointer; 
+}
+
+.logout {
+    padding: 10px 15px; 
+    background:  #4E5166;
+    border-radius: 25px;
+    color: #fff; 
+    margin-left: 10px;  
+}
+
+.logout:hover {
+    color: #fff; 
+    background: #FD2D01;
 }
 
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="content"> 
         <img src= "@/assets/icon-left-font-monochrome-white.png" alt="logo de groupomania"/>
-        <main>
+        <main class="main-connexion">
             <!-- retourne ce titre si Login -->
             <h1 v-if="mode == 'login'">Connexion</h1>
             <!-- sinon retourne ce titre si inscription -->
@@ -54,7 +54,7 @@ export default ({
 })
 </script>
 
-<style>
+<style >
    body {
         background: linear-gradient(356deg, rgba(255,215,215,1) 0%, rgba(253,45,1,0.5914740896358543) 92%);
         background-repeat: no-repeat;
@@ -68,7 +68,7 @@ export default ({
         align-items: center;
     }
 
-    main {
+    .main-connexion {
         background: #fff;
         display: flex; 
         flex-direction: column;

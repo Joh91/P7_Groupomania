@@ -25,10 +25,11 @@ exports.signup = (req, res, next) => {
                 pseudo: req.body.pseudo,
                 email: emailCryptoJs,
                 password: hash,
-                confirmPassword: req.body.confirmPassword
             }); 
+            console.log(user.password);
+            console.log(user.confirmPassword);
             // user enregistré dans la bdd
-            if(User.password === User.confirmPassword){
+            if(req.body.password === req.body.confirmPassword){
                 user.save()
                 .then(() => res.status(201).json({ message: "Utilisateur crée !"})) 
                 .catch(error => res.status(400).json({error})); 

@@ -7,6 +7,10 @@ app.use(express.json());
 const bodyParser = require('body-parser')
 app.use(bodyParser.json());
 
+//importation Helmet 
+const helmet = require('helmet');
+app.use(helmet());
+
 //importation dotenv
 require('dotenv').config({path: "./config/.env"});
 

@@ -18,31 +18,6 @@ import PostSection from '@/components/PostSection.vue'
 
 export default ({
     name: 'Homepage', 
-    methods: {
-        getUsers() {
-            axios.get("http://localhost:3000/api/user/", {
-                headers: {
-                    Authorization: 'Bearer' + localStorage.getItem('token')
-                }
-            })
-            .then((response) => {
-                console.log(response)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-        },
-
-        getPosts() {
-            axios.get("http://localhost:3000/api/posts/")
-            .then((response) => {
-                console.log(response)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-        }
-    },
     components: {
         Header,
         CreatePost, 

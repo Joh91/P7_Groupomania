@@ -11,11 +11,11 @@
                 </div>
             </div>
 
-            <div class= "post">
+            <div v-bind:key="index" v-for="(post, index) in allPosts" class= "post">
                 <div class="head-post">
                     <div class = "head-post-title">
-                        <h3>Thomas 35</h3>
-                        <h4>Publié il y a 2h</h4>
+                        <h3>{{ post.pseudo }}</h3>
+                        <h4>{{ post.createAt }}</h4>
                     </div>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -27,13 +27,23 @@
                         </ul>
                     </div>
                 </div>
-                <div class="card">
-                    <img class= "post-img" src="https://media.istockphoto.com/photos/overhead-view-of-a-chinese-new-year-reunion-dinner-activity-picture-id1288747002?b=1&k=20&m=1288747002&s=170667a&w=0&h=JCmT1TlO_NmTVrSfuGa0_h5IBDQ9KDgmd5559VxyWa8=" alt=""/>
+                <div class="card" v-if="post.imageUrl">
+                    <img class= "post-img" src= "{{ post.imageUrl }}" alt=""/>
                     <div class="card-body">
-                        <p class="card-text">Superbe réunion culinaire avec l'équipe de Shanghai</p>
+                        <p class="card-text"> {{ post.message }}</p>
                         <div class="foot">
                             <i class="fa-solid fa-thumbs-up" ></i>
-                            <button @click="getPosts">click</button>
+                            <span class="like">{{ post.like }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" v-else>
+                    <div class="card-body">
+                        <p class="card-text"> {{ post.message }}</p>
+                        <div class="foot">
+                            <i class="fa-solid fa-thumbs-up" ></i>
+                            <span class="like">{{ post.like }}</span>
                         </div>
                     </div>
                 </div>   
@@ -51,14 +61,23 @@ export default ({
         }
     }, 
         created(){
+            // configuration du header et du token qui sera retourné lors des requêtes
             const token = localStorage.getItem('token');
             const headers = {
                 Authorization: 'Bearer ' + token};
 
+            // requête Get --- récupération des posts
             axios.get('http://localhost:3000/api/posts', {headers} )
             .then((response) => {
                 console.log(response); 
+                for(const posts of response.data){
+                    this.allPosts.push(posts)
+                }
+                console.log(allPosts)
             })
+            .catch((error) => {
+                console.log(error)
+            }) 
         }
 })
 </script>
@@ -134,6 +153,10 @@ export default ({
     font-size: 12px; 
 }
 
+.card-body {
+    border: none
+}
+
 .dropdown-toggle {
     font-size: 12px;
     background: #4E5166;
@@ -152,6 +175,14 @@ export default ({
 
 .fa-thumbs-up:active {
     color: #FD2D01; 
+}
+
+.foot {
+    display: flex; 
+    align-items: flex-end;
+    padding-top: 10px; 
+    gap: 10px; 
+    border-top: 1px solid lightgrey; 
 }
 
 

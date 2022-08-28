@@ -7,14 +7,45 @@
                 </div>
                 <div class= "add-post">
                     <span>Ajouter un post</span>
-                    <i class="fa-solid fa-pen-to-square"></i>
+                    <!-- modal -->
+                     <div class="modal fade" id="ModalCreatePost" tabindex="-1" aria-labelledby="ModalCreatePost" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="ModalCreatePost">Ajouter un post</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form class="create-post">
+                                        <div class="mb-3">
+                                            <label for="message" class="form-label">Message</label>
+                                            <textarea  type="password" class="form-control" id="password" style= "height: 130px" v-model="postData.message"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="formFile" class="form-label">Ajout d'un fichier (JPG, JPEG, PNG, GIF)</label>
+                                            <input class="form-control" type="file" id="formFile" @click="addFile">
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                    <button type="button" class="btn btn-primary" @click="addPost">Envoyer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-addPost" data-bs-toggle="modal" data-bs-target="#ModalCreatePost">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>   
                 </div>
             </div>
 
             <div v-bind:key="index" v-for="(post, index) in allPosts" class= "post">
                 <div class="head-post">
                     <div class = "head-post-title">
-                        <h3>{{ post.pseudo }}</h3>
+                        <h3 >{{ post.userId }}</h3>
                         <h4>{{ post.createAt }}</h4>
                     </div>
                     <div class="dropdown">
@@ -53,32 +84,67 @@
 
 <script>
 import axios from 'axios'
+import ModalCreatePost from '@/components/ModalCreatePost.vue'
 export default ({
     name: "PostSection", 
     data(){
         return {
-            allPosts: []
+            allPosts: [],
+            postData: {
+                message: '',
+                fichier: null,
+            }
+            
         }
+    },created(){
+        // configuration du header et du token qui sera retourné lors des requêtes
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: 'Bearer ' + token};
+
+        // requête Get --- récupération des posts
+        axios.get('http://localhost:3000/api/posts', {headers} )
+        .then((response) => {
+            console.log(response); 
+            for(const posts of response.data){
+                this.allPosts.push(posts)
+            }
+            console.log(allPosts)
+        })
+        .catch((error) => {
+            console.log(error)
+        }) 
+
+        // requête Post --- Créer un post 
+        
     }, 
-        created(){
-            // configuration du header et du token qui sera retourné lors des requêtes
+    methods: {
+        addPost(){
             const token = localStorage.getItem('token');
             const headers = {
+                'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token};
-
-            // requête Get --- récupération des posts
-            axios.get('http://localhost:3000/api/posts', {headers} )
+            axios.post("http://localhost:3000/api/posts", {headers},  this.postData.message, this.postData.fichier, )
             .then((response) => {
-                console.log(response); 
-                for(const posts of response.data){
-                    this.allPosts.push(posts)
-                }
-                console.log(allPosts)
+                console.log(headers)
+                this.$router.push('/home');
             })
             .catch((error) => {
                 console.log(error)
-            }) 
+            })   
+        },
+
+        addFile(){
+            this.fichier = this.$refs.file.files[0]; 
         }
+    }, 
+    
+    components : {
+        ModalCreatePost
+    }
+
+
+    
 })
 </script>
 
@@ -111,7 +177,7 @@ export default ({
 
 .add-post {
     display: flex; 
-    gap: 20px; 
+    gap: 15px; 
 }
 
 .add-post span {
@@ -120,6 +186,12 @@ export default ({
     color: #4E5166; 
 
 }
+
+.btn-addPost {
+    border: none;
+    background: inherit;
+}
+
 
 .fa-pen-to-square {
     font-size: 20px; 

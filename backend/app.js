@@ -22,6 +22,10 @@ const posts = require('./routes/posts');
 // importation path 
 const path = require('path');
 
+// import Cors 
+const cors = require('cors'); 
+app.use(cors())
+
 /*----- Securité -----*/
 //contrôle d'accès
 app.use((req, res, next) => {

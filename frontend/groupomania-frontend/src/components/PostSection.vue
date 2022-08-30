@@ -20,11 +20,11 @@
                                     <form class="create-post">
                                         <div class="mb-3">
                                             <label for="message" class="form-label">Message</label>
-                                            <textarea  type="password" class="form-control" id="password" style= "height: 130px" v-model="postData.message"></textarea>
+                                            <textarea  type="password" class="form-control" id="password" style= "height: 130px" v-model='message'></textarea>
                                         </div>
                                         <div class="mb-3">
                                             <label for="formFile" class="form-label">Ajout d'un fichier (JPG, JPEG, PNG, GIF)</label>
-                                            <input class="form-control" type="file" id="formFile" @click="addFile">
+                                            <input class="form-control" type="file" id="formFile" @click="onFileSelected" ref="imageUrl">
                                         </div>
                                     </form>
                                 </div>
@@ -53,13 +53,13 @@
                             <i class="fa-solid fa-gear"></i>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Modifier</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalCreatePost">Modifier</a></li>
                             <li><a class="dropdown-item" href="#">Supprimer</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="card" v-if="post.imageUrl">
-                    <img class= "post-img" src= "{{ post.imageUrl }}" alt=""/>
+                    <img class= "post-img" :src= "post.imageUrl" alt=""/>
                     <div class="card-body">
                         <p class="card-text"> {{ post.message }}</p>
                         <div class="foot">
@@ -84,26 +84,22 @@
 
 <script>
 import axios from 'axios'
-import ModalCreatePost from '@/components/ModalCreatePost.vue'
+import FormData from 'form-data'
+
 export default ({
     name: "PostSection", 
     data(){
         return {
             allPosts: [],
-            postData: {
-                message: '',
-                fichier: null,
-            }
-            
+            message: "", 
+            imageUrl: null,
         }
-    },created(){
+    },
+    created(){
         // configuration du header et du token qui sera retourné lors des requêtes
-        const token = localStorage.getItem('token');
-        const headers = {
-            Authorization: 'Bearer ' + token};
 
         // requête Get --- récupération des posts
-        axios.get('http://localhost:3000/api/posts', {headers} )
+        axios.get('http://localhost:3000/api/posts')
         .then((response) => {
             console.log(response); 
             for(const posts of response.data){
@@ -115,36 +111,35 @@ export default ({
             console.log(error)
         }) 
 
-        // requête Post --- Créer un post 
+        
         
     }, 
     methods: {
-        addPost(){
-            const token = localStorage.getItem('token');
-            const headers = {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + token};
-            axios.post("http://localhost:3000/api/posts", {headers},  this.postData.message, this.postData.fichier, )
-            .then((response) => {
-                console.log(headers)
-                this.$router.push('/home');
-            })
-            .catch((error) => {
+        // ajout d'un fichier 
+        onFileSelected(e){
+            // this.imageUrl = this.$refs.imageUrl.files[0]; 
+            this.file = e.target.files[0];
+            console.log(e)
+        },
+        // requête Post --- Créer un post 
+        async addPost(){
+            try {
+                let data = new FormData();
+                data.append("message", this.message);
+                data.append("imageUrl", this.imageUrl);
+
+                await axios.post("http://localhost:3000/api/posts", data)
+                .then((response) => {
+                    console.log("test1", response )
+                    console.log("test2", data.imageUrl)
+                })
+            } catch(error) {
                 console.log(error)
-            })   
+            }  
         },
 
-        addFile(){
-            this.fichier = this.$refs.file.files[0]; 
-        }
-    }, 
-    
-    components : {
-        ModalCreatePost
-    }
-
-
-    
+        
+    },    
 })
 </script>
 

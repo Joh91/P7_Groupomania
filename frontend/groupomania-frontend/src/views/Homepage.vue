@@ -2,7 +2,6 @@
     <div class="home">
         <Header/>
         <main class="main-homepage">
-            <CreatePost/>
             <PostSection/>
         </main>
         
@@ -13,14 +12,12 @@
 <script>
 import axios from 'axios'
 import Header from '@/components/Header.vue'
-import CreatePost from '@/components/CreatePost.vue'
 import PostSection from '@/components/PostSection.vue'
 
 export default ({
     name: 'Homepage', 
     components: {
         Header,
-        CreatePost, 
         PostSection
     }
 })

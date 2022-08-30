@@ -6,19 +6,23 @@ const fs = require('fs');
 
 /*---- requête Post ----*/ 
 exports.createPosts = (req, res, next) => {
-    // création de l'objet à conserver dans la bdd 
+    let image = null 
+    if (req.file){
+        image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    }
     const post = new Posts({
-        pseudo: req.body.pseudo,
         message: req.body.message,
-        like: req.body.like, 
-        likers: [],
-        userId: req.auth.userId,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        userId: req.auth.userId, 
+        imageUrl: image, 
     }); 
     // post enregistré
     console.log(post)
     post.save()
     .then(() => res.status(201).json({ message: "Post crée !"})) 
+
+    
+    // création de l'objet à conserver dans la bdd 
+   
     .catch(error => res.status(400).json({error})); 
 }; 
 

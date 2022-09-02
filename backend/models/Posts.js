@@ -6,9 +6,13 @@ const PostsSchema = mongoose.Schema({
     userId: {type: String, required: true}, 
     pseudo: {type: String},
     message: {type: String, maxlength: 350},
-    imageUrl: {type: String},
+    file: {type: String},
     like: {type: Number, default: 0}, 
     likers: {type: [String]}, 
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+     }
 },
 {
     timestamps: true, 

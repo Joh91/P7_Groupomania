@@ -1,145 +1,160 @@
 <template>
     <section class="get-post">
+        <!-- header -->
             <div class="head">
                 <div class="title">
                     <h2>Bonjour (...)</h2>
                     <h3>Voici les derniers posts publiés</h3>
                 </div>
-                <div class= "add-post">
-                    <span>Ajouter un post</span>
-                    <!-- modal -->
-                     <div class="modal fade" id="ModalCreatePost" tabindex="-1" aria-labelledby="ModalCreatePost" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="ModalCreatePost">Ajouter un post</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
+            </div>
 
-                                <div class="modal-body">
-                                    <form class="create-post">
-                                        <div class="mb-3">
-                                            <label for="message" class="form-label">Message</label>
-                                            <textarea  type="password" class="form-control" id="password" style= "height: 130px" v-model='message'></textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="formFile" class="form-label">Ajout d'un fichier (JPG, JPEG, PNG, GIF)</label>
-                                            <input class="form-control" type="file" id="formFile" @click="onFileSelected" ref="imageUrl">
-                                        </div>
-                                    </form>
-                                </div>
-                                
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                    <button type="button" class="btn btn-primary" @click="addPost">Envoyer</button>
+            <!-- en-tête du post -->
+            <div v-if="allPosts != null"> 
+                <div  v-for="post in allPosts" v-bind:key="post._id" class= "post">
+                    <div class="head-post">
+                        <div class = "head-post-title">
+                            <h3 >{{ post.user.pseudo}}</h3>
+                            <h4>{{ post.createAt }}</h4>
+                        </div>
+
+                        <!-- option post : modifier / supprimer -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-gear"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- <li><a href="#" data-bs-toggle="modal" data-bs-target="#ModalModifyPost">Modifier</a></li> -->
+                                <li><router-link :to="{ name:'Post', params: {id: post._id} }" class="dropdown-item" @click="switchToModify">Modifier</router-link></li>
+                                <li><router-link :to="{ name:'Post', params: {id: post._id} }" class="dropdown-item" @click="deletePost">Supprimer</router-link></li>
+                                <!-- <li><router-link class="dropdown-item" href="#">Supprimer</router-link></li> -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- corps du post: message + image -->
+                    <div class="card" v-if="mode == 'post'">
+                        <div v-if="post.file">
+                            <img class= "post-img" :src= "post.file" alt=""/>
+                            <div class="card-body">
+                                <p class="card-text"> {{ post.message }}</p>
+                                <div class="foot">
+                                    <i class="fa-solid fa-thumbs-up" ></i>
+                                    <span class="like">{{ post.like }}</span>
                                 </div>
                             </div>
                         </div>
+                        <div v-else> 
+                            <!-- corps du post: message -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="card-text"> {{ post.message }}</p>
+                                    <div class="foot">
+                                        <i class="fa-solid fa-thumbs-up" ></i>
+                                        <span class="like">{{ post.like }}</span>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
                     </div>
-                    <button class="btn-addPost" data-bs-toggle="modal" data-bs-target="#ModalCreatePost">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>   
-                </div>
+
+                    <div class="card" v-else>
+                        <form class="create-post" @submit.prevent="modifyPost">
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea  type="text" class="form-control" id="message" style= "height: 130px" v-model="message"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="selectfile" class="form-label">Ajout d'un fichier (JPG, JPEG, PNG, GIF)</label>
+                                <input class="form-control" type="file" id="selectfile" @change="newFile" ref="file">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Modifier</button>
+                        </form>
+                    </div>
+                </div> 
             </div>
-
-            <div v-bind:key="index" v-for="(post, index) in allPosts" class= "post">
-                <div class="head-post">
-                    <div class = "head-post-title">
-                        <h3 >{{ post.userId }}</h3>
-                        <h4>{{ post.createAt }}</h4>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-gear"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalCreatePost">Modifier</a></li>
-                            <li><a class="dropdown-item" href="#">Supprimer</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="card" v-if="post.imageUrl">
-                    <img class= "post-img" :src= "post.imageUrl" alt=""/>
-                    <div class="card-body">
-                        <p class="card-text"> {{ post.message }}</p>
-                        <div class="foot">
-                            <i class="fa-solid fa-thumbs-up" ></i>
-                            <span class="like">{{ post.like }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" v-else>
-                    <div class="card-body">
-                        <p class="card-text"> {{ post.message }}</p>
-                        <div class="foot">
-                            <i class="fa-solid fa-thumbs-up" ></i>
-                            <span class="like">{{ post.like }}</span>
-                        </div>
-                    </div>
-                </div>   
-            </div> 
     </section>
 </template>
 
 <script>
 import axios from 'axios'
-import FormData from 'form-data'
 
 export default ({
     name: "PostSection", 
     data(){
         return {
-            allPosts: [],
+            mode: "", 
+            allPosts: null,
             message: "", 
-            imageUrl: null,
+            file: null,
+            mode: "post"
         }
     },
-    created(){
+    async mounted(){
+        try {
         // configuration du header et du token qui sera retourné lors des requêtes
-
         // requête Get --- récupération des posts
-        axios.get('http://localhost:3000/api/posts')
-        .then((response) => {
-            console.log(response); 
-            for(const posts of response.data){
-                this.allPosts.push(posts)
-            }
-            console.log(allPosts)
-        })
-        .catch((error) => {
+            let getPost = await axios.get('http://localhost:3000/api/posts')
+            this.allPosts = getPost.data;
+                console.log("test2", allPosts)
+                
+        }
+        
+        catch(error){
             console.log(error)
-        }) 
-
-        
-        
+        }   
     }, 
     methods: {
-        // ajout d'un fichier 
-        onFileSelected(e){
-            // this.imageUrl = this.$refs.imageUrl.files[0]; 
-            this.file = e.target.files[0];
-            console.log(e)
+        switchToModify(){
+            this.mode = "modify"
+        }, 
+
+           // ajout d'un fichier 
+        newFile(){
+            console.log("testtest", this.$refs) 
+            this.file = this.$refs.file[0].files[0];
+            
+            console.log(this.file)
         },
-        // requête Post --- Créer un post 
-        async addPost(){
+
+        // requête Put -- Modifier un post 
+       async modifyPost(){
             try {
-                let data = new FormData();
-                data.append("message", this.message);
-                data.append("imageUrl", this.imageUrl);
+                // Récupération de l'id depuis l'URL 
+                let Id = this.$route.params.id; 
+                console.log("test Id", Id); 
 
-                await axios.post("http://localhost:3000/api/posts", data)
+                let newData = new FormData();
+                newData.append("message", this.message);
+                newData.append("image", this.file);
+
+                 await axios.put(`http://localhost:3000/api/posts/${Id}`, newData)
                 .then((response) => {
-                    console.log("test1", response )
-                    console.log("test2", data.imageUrl)
+                    console.log("test1", response)
+                    console.log("test data", newData)
+                    console.log("post modifié")
                 })
-            } catch(error) {
+
+            } catch (error) { 
                 console.log(error)
-            }  
+            }
         },
 
-        
-    },    
+       async deletePost(){
+            try {
+                // Récupération de l'id depuis l'URL 
+                let Id = this.$route.params.id; 
+                console.log("test Id", Id); 
+
+               await axios.delete(`http://localhost:3000/api/posts/${Id}`)
+               .then(() => {
+                redirect: to => { return 'home'}
+                console.log("post supprimé")
+               })
+            } catch (error){
+                console.log(error)
+            }
+        }
+    }, 
 })
 </script>
 

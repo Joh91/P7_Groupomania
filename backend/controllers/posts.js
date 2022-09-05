@@ -22,7 +22,6 @@ exports.createPosts = (req, res, next) => {
 
     
     // création de l'objet à conserver dans la bdd 
-   
     .catch(error => res.status(400).json({error})); 
 }; 
 
@@ -33,38 +32,52 @@ exports.getPosts = (req, res, next) => {
     // .populate('user')
     .sort({ createdAt: -1})
     .then((posts) => {
-        console.log(posts)
-        res.status(200).json(posts)
+        User.find()
+        .then((users) => {
+            for (const post of posts) {
+                for (const user of users){
+                    if(post.userId == user._id){
+                        post.user = user
+                    }
+                }
+            }
+            console.log(posts)
+            res.status(200).json(posts)
+        })
+        .catch ((error) => {
+            res.status(400).json({error})
+        })
     })
     .catch((error) => {res.status(400).json({error})});
 };
 
 /*---- requête PUT ----*/ 
 exports.updatePosts = (req, res, next) => {
-    //valeurs à modifier; "req files ? " vérifie si un fichier est présent
-  //1er cas: fichier présent
+//     //valeurs à modifier; "req files ? " vérifie si un fichier est présent
+//   //1er cas: fichier présent
   const postObject = req.file 
   ? {
     message: req.body.message,
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    file: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   } //2e cas: pas de fichier présent
   : {message: req.body.message}; 
 
-  Posts.findByIdAndUpdate(req.params.id, {$set: postObject, _id: req.params.id})
+  Posts.findOneAndUpdate({_id: req.params.id}, {...postObject, _id: req.params.id})
   .then((post) => {
         //auth
         if (post.userId === req.auth.userId || User.body.isAdmin === true){
             //récupération du fichier précédent et suppression
-            let oldFile = post.imageUrl.split('images/')[1];
+            let oldFile = post.file.split('images/')[1];
             fs.unlink(`images/${oldFile}`, () => {
-            res.status(200).json({message: "Post modifié !"})}) 
+            res.status(200).json({message: "Post modifié !"})})
             console.log(postObject); 
         } else {
             res.status(401).json({ message : "Non-autorisé"});
         }
     })
   .catch((error) => {
-        res.status(400).json({error}); 
+        res.status(400).json({error})
+        console.log(error); 
     })
 }; 
 

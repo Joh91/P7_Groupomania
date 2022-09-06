@@ -54,7 +54,8 @@ export default ({
 })
 </script>
 
-<style >
+<style>
+    /* personnalisation de l'arrière-plan et disposition */
    body {
         background: linear-gradient(356deg, rgba(255,215,215,1) 0%, rgba(253,45,1,0.5914740896358543) 92%);
         background-repeat: no-repeat;
@@ -62,12 +63,19 @@ export default ({
         margin: auto;  
     }
 
+    /* disposition des éléments */
     .content {
         display: flex; 
         flex-direction: column;
         align-items: center;
     }
 
+    /* image */
+    img {
+        width: 350px; 
+    }
+
+    /* Personnalisation du coprs de texte */
     .main-connexion {
         background: #fff;
         display: flex; 
@@ -91,13 +99,72 @@ export default ({
         cursor: pointer;
     }
 
-    img {
-        width: 35%; 
-
-    }
-
     .nav-connexion {
         text-align: center;
+    }
+
+    /* personnalisation des composants */
+    .form-login{
+        width: 700px; 
+    }
+
+    label, button {
+        font-weight: bold;
+    }
+
+    input {
+        border-color: #4E5166
+    }
+
+    .btn {
+        background-color: #4E5166; 
+        border-color: #4E5166;
+        margin-top: 20px; 
+    }
+
+    .btn:hover{
+        background: #FD2D01; 
+        border-color: #FD2D01; 
+    }
+
+    /* gestion des Medias queries */
+    @media screen and (max-width: 850px) {
+        .main-connexion{
+            width: 80%; 
+        }
+
+        .form-login {
+            width: 100%; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+    }
+
+     @media screen and (max-width: 420px) {
+        .main-connexion{
+            width: 90%; 
+        }
+
+        img {
+            width: 250px; 
+        }
+
+        label{
+            display: flex; 
+            justify-content: center;
+        }
+
+        .nav-connexion {
+            margin-bottom: 30px;
+        }
+
+        .form-login {
+            width: 100%; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
     }
 
 </style>

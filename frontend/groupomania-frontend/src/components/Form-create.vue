@@ -1,7 +1,7 @@
 <template>
   
     <div class="col-12">
-        <form @submit="postCreate">
+        <form @submit="postCreate" class="form-login">
             <div class="mb-3" >
                 <label for="pseudo" class="form-label">Pseudo</label>
                 <input v-model="dataCreate.pseudo" type="text" class="form-control" id="pseudo">
@@ -56,26 +56,5 @@ export default ({
 </script>
 
 <style scoped>
-    form{
-        width: 700px; 
-    }
-
-    label, button {
-        font-weight: bold;
-    }
-
-    input {
-        border-color: #4E5166
-    }
-
-    button {
-        background-color: #4E5166; 
-        border-color: #4E5166;
-        margin-top: 20px; 
-    }
-
-    button:hover{
-        background: #FD2D01; 
-        border-color: #FD2D01; 
-    }
+   
 </style>

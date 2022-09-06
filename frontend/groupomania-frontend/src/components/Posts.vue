@@ -24,7 +24,9 @@
                 <div class="card-body">
                     <p class="card-text"> {{ postsInfos.message }}</p>
                     <div class="foot">
-                        <i class="fa-solid fa-thumbs-up" ></i>
+                        <router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="getLiked">
+                            <i class="fa-solid fa-thumbs-up"></i>
+                        </router-link>
                         <span class="like">{{ postsInfos.like }}</span>
                     </div>
                 </div>
@@ -35,7 +37,9 @@
                     <div class="card-body">
                         <p class="card-text"> {{ postsInfos.message }}</p>
                         <div class="foot">
-                            <i class="fa-solid fa-thumbs-up" ></i>
+                            <router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="getLiked">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                            </router-link>
                             <span class="like">{{ postsInfos.like }}</span>
                         </div>
                     </div>
@@ -84,22 +88,22 @@ export default({
         }
     }, 
     methods: {
-        // Déclan
+        // Déclanche la personnalisation du post pour la fonction modification 
         switchToModify(){
             this.mode = "modify"
         }, 
 
+        // Déclanche la personnalisation du post pour la fonction de suppression
         switchToDelete(){
             this.mode = "delete"
         },
 
+        // Redirection vers la homepage 
         returnToHome(){
             this.$router.push('/home')
         }, 
 
-       
-
-        // ajout d'un fichier 
+        // Chargement d'un fichier depuis input-file 
         newFile(){
             console.log("testtest", this.$refs) 
             this.file = this.$refs.file.files[0];
@@ -114,10 +118,12 @@ export default({
                 let Id = this.$route.params.id; 
                 console.log("test Id", Id); 
 
+                // Creation de du Fomr-Data à retourner
                 let newData = new FormData();
                 newData.append("message", this.message);
                 newData.append("image", this.file);
 
+                // Appel à l'api
                 if( this.message != ""){
                      await axios.put(`http://localhost:3000/api/posts/${Id}`, newData)
                     .then((response) => {
@@ -139,10 +145,31 @@ export default({
                 // Récupération de l'id depuis l'URL 
                 let Id = this.$route.params.id; 
                 console.log("test Id", Id); 
+
+                // Appel à l'Api
                await axios.delete(`http://localhost:3000/api/posts/${Id}`)
                .then(() => {
                 this.returnToHome();
                 console.log("post supprimé")
+               })
+            } catch (error){
+                console.log(error)
+            }
+        },
+
+        async getLiked(){
+             try {
+                // Récupération de l'id depuis l'URL 
+                let Id = this.$route.params.id; 
+                console.log("test Id", Id); 
+
+                
+
+                // Appel à l'Api
+               await axios.post(`http://localhost:3000/api/posts/like/${Id}`)
+               .then(() => {
+                this.returnToHome();
+                console.log("post liké")
                })
             } catch (error){
                 console.log(error)

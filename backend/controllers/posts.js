@@ -60,12 +60,12 @@ exports.updatePosts = (req, res, next) => {
     message: req.body.message,
     file: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   } //2e cas: pas de fichier présent
-  : {message: req.body.message}; 
+  : {message: req.body.message, file: null}; 
 
   Posts.findOneAndUpdate({_id: req.params.id}, {...postObject, _id: req.params.id})
   .then((post) => {
         //auth
-        if (post.userId === req.auth.userId || User.body.isAdmin === true){
+        if (post.userId == req.auth.userId || User.body.isAdmin == true){
             //récupération du fichier précédent et suppression
             let oldFile = post.file.split('images/')[1];
             fs.unlink(`images/${oldFile}`, () => {
@@ -116,4 +116,5 @@ exports.getLikes = (req, res, next) => {
             .catch((error) => res.status(400).json({error}));
         }
     })
+    .catch((error) => {res.status(400).json({error})});
 }

@@ -26,7 +26,7 @@ export default ({
             // modèle des données à expédier
             dataLogin: {
                 email: '',
-                password: ''
+                password: '', 
             }
         }
     }, 
@@ -36,7 +36,10 @@ export default ({
             e.preventDefault()
             axios.post("http://localhost:3000/api/auth/login", this.dataLogin)
             .then((response) => {
-                localStorage.setItem('token', response.data.token);
+                console.log(response.data)
+                localStorage.setItem('token', response.data.token)
+                localStorage.setItem('userId', response.data.userId);
+                localStorage.setItem('admin', response.data.admin);
                 this.$router.push('/home');
             })
             .catch((error) => {

@@ -15,15 +15,13 @@ exports.signup = (req, res, next) => {
     const regexEmail = (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
     // contrôle des champs saisis 
     if (regexPassword.test(req.body.password) && regexEmail.test(req.body.email)){
-        //chiffrage de l'adresse-mail
-        const emailCryptoJs = cryptoJs.SHA256(req.body.email, process.env.SECRET_KEYS).toString();
         // configuration de bcrypt pour hasher le mdp
         bcrypt.hash(req.body.password, 10)
         .then(hash => {
             // création de l'objet à conserver dans la bdd 
             const user = new User({
                 pseudo: req.body.pseudo,
-                email: emailCryptoJs,
+                email: req.body.email,
                 password: hash,
             }); 
             console.log(user.password);
@@ -47,10 +45,8 @@ exports.signup = (req, res, next) => {
 
 /*----- Process login ------*/ 
 exports.login = (req, res, next) => {
-    //chiffrage de l'adresse-mail
-    const emailCryptoJs = cryptoJs.SHA256(req.body.email, process.env.SECRET_KEYS).toString();
     //Correspondance entre l'email saisie et celle enregistrée dans la db 
-    User.findOne({email: emailCryptoJs})
+    User.findOne({email: req.body.email})
     .then(user => {
         // !correspondance 
         if (user === null){
@@ -69,6 +65,7 @@ exports.login = (req, res, next) => {
                 else {
                     res.status(200).json({
                         userId: user._id,
+                        admin: user.isAdmin, 
                         token: jwt.sign(
                             {userId: user._id},
                             process.env.TOKEN_PASSWORD,

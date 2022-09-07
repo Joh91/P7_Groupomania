@@ -39,7 +39,7 @@ export default ({
             await axios.get('http://localhost:3000/api/posts')
             .then((response) => {
                 for(const getPosts of response.data){
-                    this.allPosts.push(getPosts)
+                    this.allPosts.push(getPosts); 
                 }
             })     
         }

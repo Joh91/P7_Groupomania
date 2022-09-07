@@ -2,8 +2,8 @@
     <div class = "Post-body" >
         <div class="head-post">
             <div class = "head-post-title">
-                <h3 >{{ postsInfos.user.pseudo}}</h3>
-                <h4>{{ postsInfos.createAt }}</h4> 
+                <!-- <h3 >{{ postsInfos.user.pseudo}}</h3> -->
+                <h4>{{ postsInfos.createdAt}}</h4> 
             </div>
             <!-- nav: modifier / supprimer -->
             <div class="dropdown">
@@ -86,7 +86,7 @@ export default({
             message: '', 
             file: null,
         }
-    }, 
+    },  
     methods: {
         // Déclanche la personnalisation du post pour la fonction modification 
         switchToModify(){
@@ -127,7 +127,6 @@ export default({
                 if( this.message != ""){
                      await axios.put(`http://localhost:3000/api/posts/${Id}`, newData)
                     .then((response) => {
-                        this.returnToHome(); 
                         console.log("test1", response)
                         console.log("test data", newData)
                         console.log("post modifié")
@@ -149,7 +148,6 @@ export default({
                 // Appel à l'Api
                await axios.delete(`http://localhost:3000/api/posts/${Id}`)
                .then(() => {
-                this.returnToHome();
                 console.log("post supprimé")
                })
             } catch (error){
@@ -162,8 +160,6 @@ export default({
                 // Récupération de l'id depuis l'URL 
                 let Id = this.$route.params.id; 
                 console.log("test Id", Id); 
-
-                
 
                 // Appel à l'Api
                await axios.post(`http://localhost:3000/api/posts/like/${Id}`)

@@ -15,11 +15,21 @@ import PostSection from '@/components/PostSection.vue'
 
 export default ({
     name: 'Homepage', 
+
+    mounted () {
+    // retour à la page de connexion lorsque le token arrive à expiration 
+        let token = localStorage.getItem('token');
+        if(!token) {
+            this.$router.push('/');
+        }
+    },
+
+
     components: {
         Header,
         CreatePost,
         PostSection
-    }
+    }, 
 })
 </script>
 

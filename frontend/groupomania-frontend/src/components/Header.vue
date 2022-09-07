@@ -8,8 +8,9 @@
             </div>
             <div>
                 <a href="#">Accueil</a>
-                <a href="#">Utilisateurs</a>
-                <a href="profil.html">Profil</a>
+                <router-link to="/users">Utilisateurs</router-link>
+                <router-link :to="{ name:'Profil', params: {id: userId} }">Profil</router-link>
+                <!-- :to="{ name:'Post', params: {id: postsInfos._id} } -->
                 <span class="logout" @click="logout()">Déconnexion</span>
             </div>
         </nav>
@@ -19,12 +20,24 @@
 <script>
 export default ({
     name: "Header",
+    computed : {
+        userId(){
+            if(localStorage.getItem('userId')){
+                return localStorage.getItem('userId')
+            } else {
+                console.log("pas de propriétés dans le localstorage!")
+                return {}
+            }
+        }
+    },
     methods: {
         /* --  methode de deconnexion -- 
         1. suppression du token présent dans le localstorage
         2. retour à la page de connexion */
         logout () {
             localStorage.removeItem('token');
+            localStorage.removeItem("userId");
+            localStorage.removeItem("admin");
             this.$router.push('/')
         }
     }

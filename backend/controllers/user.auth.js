@@ -44,9 +44,9 @@ exports.signup = (req, res, next) => {
 };
 
 /*----- Process login ------*/ 
-exports.login = (req, res, next) => {
+exports.login = async (req, res, next) => {
     //Correspondance entre l'email saisie et celle enregistrée dans la db 
-    User.findOne({email: req.body.email})
+     await User.findOne({email: req.body.email})
     .then(user => {
         // !correspondance 
         if (user === null){
@@ -55,7 +55,7 @@ exports.login = (req, res, next) => {
         // si correspondance 
         else {
             // correspondance entre le mdp scripté et enregistré dans la db et celui saisi
-            bcrypt.compare(req.body.password, user.password)
+             bcrypt.compare(req.body.password, user.password)
             .then(valid => {
                 // !correspondance 
                 if(!valid){
@@ -67,7 +67,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         admin: user.isAdmin, 
                         token: jwt.sign(
-                            {userId: user._id},
+                            {userId: user._id, admin: user.isAdmin},
                             process.env.TOKEN_PASSWORD,
                             {expiresIn: "24h"}
                         )

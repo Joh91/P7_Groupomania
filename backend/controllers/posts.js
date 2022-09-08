@@ -5,7 +5,7 @@ const fs = require('fs');
 
 
 /*---- requête Post ----*/ 
-exports.createPosts = (req, res, next) => {
+exports.createPosts = async (req, res, next) => {
     let image = null 
     if (req.file){
         image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -17,7 +17,7 @@ exports.createPosts = (req, res, next) => {
     }); 
     // post enregistré
     console.log(post)
-    post.save()
+    await post.save()
     .then(() => res.status(201).json({ message: "Post crée !"})) 
 
     
@@ -26,22 +26,14 @@ exports.createPosts = (req, res, next) => {
 }; 
 
 /*---- requête Get ----*/ 
-exports.getPosts = (req, res, next) => {
+exports.getPosts = async (req, res, next) => {
     //Affichage des posts par ordre chronologique
-    Posts.find()
+   await Posts.find()
     // .populate('user')
     .sort({ createdAt: -1})
     .then((posts) => {
         User.find()
         .then((users) => {
-            for (const post of posts) {
-                for (const user of users){
-                    if(post.userId == user._id){
-                        post.user = user
-                    }
-                }
-            }
-            console.log(posts)
             res.status(200).json(posts)
         })
         .catch ((error) => {
@@ -52,7 +44,7 @@ exports.getPosts = (req, res, next) => {
 };
 
 /*---- requête PUT ----*/ 
-exports.updatePosts = (req, res, next) => {
+exports.updatePosts = async (req, res, next) => {
 //     //valeurs à modifier; "req files ? " vérifie si un fichier est présent
 //   //1er cas: fichier présent
   const postObject = req.file 
@@ -62,10 +54,10 @@ exports.updatePosts = (req, res, next) => {
   } //2e cas: pas de fichier présent
   : {message: req.body.message, file: null}; 
 
-  Posts.findOneAndUpdate({_id: req.params.id}, {...postObject, _id: req.params.id})
+ await Posts.findOneAndUpdate({_id: req.params.id}, {...postObject, _id: req.params.id})
   .then((post) => {
         //auth
-        if (post.userId == req.auth.userId || User.body.isAdmin == true){
+        if (post.userId == req.auth.userId || req.admin == true){
             //récupération du fichier précédent et suppression
             let oldFile = post.file.split('images/')[1];
             fs.unlink(`images/${oldFile}`, () => {
@@ -83,12 +75,16 @@ exports.updatePosts = (req, res, next) => {
 
 
 /*---- requête DELETE ----*/ 
-exports.deletePosts = (req, res, next) => {
-    Posts.findOne({_id: req.params.id})
+exports.deletePosts = async (req, res, next) => {
+    await Posts.findOne({_id: req.params.id})
     .then (post => {
-        post.deleteOne({_id: req.params.id})
-        .then(() => {res.status(200).json({message: "post supprimé !"})})
-        .catch(error => res.status(400).json({ error }));
+        if (post.userId == req.auth.userId || req.admin == true){
+            post.deleteOne({_id: req.params.id})
+            .then(() => {res.status(200).json({message: "post supprimé !"})})
+            .catch(error => res.status(400).json({ error }));
+        } else {
+            res.status(401).json({ message : "Non-autorisé"});
+        }
     })
     .catch ((error) => {
         res.status(500).json({error}); 
@@ -97,9 +93,9 @@ exports.deletePosts = (req, res, next) => {
 
 
 /*----- requête Get like -----*/ 
-exports.getLikes = (req, res, next) => {
+exports.getLikes = async (req, res, next) => {
     // récupération du post à liker
-    Posts.find({_id: req.params.id})
+    await Posts.find({_id: req.params.id})
     .then((post) => {
         // l'utilisateur n'a pas encore liké, userId ne se trouve pas dans l'array Likers 
         if(!post.likers.includes(req.body.userId)){

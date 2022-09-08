@@ -37,7 +37,6 @@ export default ({
         logout () {
             localStorage.removeItem('token');
             localStorage.removeItem("userId");
-            localStorage.removeItem("admin");
             this.$router.push('/')
         }
     }

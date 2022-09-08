@@ -10,17 +10,17 @@
                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-gear"></i>
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" >
                     <li><router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="switchToModify">Modifier</router-link></li>
                     <li><router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="switchToDelete">Supprimer</router-link></li>
                 </ul>
             </div>
         </div>
 
-        <!-- corps du post: message + image -->
+        <!-- corps du post -->
         <div class="card" v-if="mode == 'post'">
-            <div v-if="postsInfos.file">
-                <img class= "post-img" :src= "postsInfos.file" alt=""/>
+            <div>
+                <img class= "post-img" :src= "postsInfos.file" v-if="postsInfos.file">
                 <div class="card-body">
                     <p class="card-text"> {{ postsInfos.message }}</p>
                     <div class="foot">
@@ -30,20 +30,6 @@
                         <span class="like">{{ postsInfos.like }}</span>
                     </div>
                 </div>
-            </div>
-            <div v-else> 
-                <!-- corps du post: message -->
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-text"> {{ postsInfos.message }}</p>
-                        <div class="foot">
-                            <router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="getLiked">
-                                <i class="fa-solid fa-thumbs-up"></i>
-                            </router-link>
-                            <span class="like">{{ postsInfos.like }}</span>
-                        </div>
-                    </div>
-                </div> 
             </div>
         </div>
 
@@ -85,6 +71,7 @@ export default({
             mode: "post", 
             message: '', 
             file: null,
+            like: "", 
         }
     },  
     methods: {
@@ -97,11 +84,6 @@ export default({
         switchToDelete(){
             this.mode = "delete"
         },
-
-        // Redirection vers la homepage 
-        returnToHome(){
-            this.$router.push('/home')
-        }, 
 
         // Chargement d'un fichier depuis input-file 
         newFile(){
@@ -127,6 +109,7 @@ export default({
                 if( this.message != ""){
                      await axios.put(`http://localhost:3000/api/posts/${Id}`, newData)
                     .then((response) => {
+                        this.$route.push('/home')
                         console.log("test1", response)
                         console.log("test data", newData)
                         console.log("post modifié")
@@ -148,6 +131,7 @@ export default({
                 // Appel à l'Api
                await axios.delete(`http://localhost:3000/api/posts/${Id}`)
                .then(() => {
+                this.$route.push('/home')
                 console.log("post supprimé")
                })
             } catch (error){

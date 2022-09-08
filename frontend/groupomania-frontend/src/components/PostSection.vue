@@ -41,7 +41,7 @@ export default ({
                 for(const getPosts of response.data){
                     this.allPosts.push(getPosts); 
                 }
-            })     
+            })  
         }
         
         catch(error){

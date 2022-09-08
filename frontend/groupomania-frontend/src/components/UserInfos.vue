@@ -17,8 +17,8 @@
                     <h3>{{user.createdAt}}</h3>
                 </div>
                 <div class="options">
-                    <button type="submit" class="btn btn-primary">Suivre</button>
-                    <button type="submit" class="btn btn-primary">Supprimer</button>
+                    <router-link :to="{ name:'User', params: {id: user._id} }" class="btn btn-primary">Suivre</router-link>
+                    <router-link :to="{ name:'User', params: {id: user._id} }" class="btn btn-primary" @click="deleteCount">Supprimer</router-link>
                 </div>
             </div>
     </section>
@@ -34,7 +34,7 @@ export default ({
         }
     },
 
-     async mounted(){
+    async mounted(){
         try {
         // configuration du header et du token qui sera retourné lors des requêtes
         // requête Get --- récupération des posts
@@ -50,6 +50,27 @@ export default ({
             console.log(error)
         }  
     }, 
+
+    methods: {
+        // requête Delete -- Supprimer un compte
+        async deleteCount(){
+            try {
+                // Récupération de l'id depuis l'URL 
+                let Id = this.$route.params.id; 
+                console.log("test Id", Id); 
+
+                // Appel à l'Api
+            await axios.delete(`http://localhost:3000/api/user/${Id}`)
+            .then(() => {
+                console.log("compte supprimé")
+                //  this.$router.push('/users')
+            })
+            } catch (error){
+                console.log(error)
+                // this.$router.push('/users')
+            }
+        },
+    }
 })
 </script>
 

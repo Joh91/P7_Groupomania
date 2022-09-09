@@ -33,7 +33,7 @@ export default ({
         }
     },
 
-     async created(){
+     async mounted(){
         try {
         // requête Get --- récupération des posts
             await axios.get('http://localhost:3000/api/posts')
@@ -49,7 +49,7 @@ export default ({
         }   
     }, 
     
-    async mounted (){
+    async created(){
         try {
             // récupération de l'userId auprès du localstorage nécessaire pour notre requête
             const Id = localStorage.getItem('userId');

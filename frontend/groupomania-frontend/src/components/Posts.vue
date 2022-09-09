@@ -76,17 +76,6 @@ export default({
         }
     }, 
     
-    //  computed : {
-    //     userId(){
-    //         if(localStorage.getItem('userId')){
-    //             return localStorage.getItem('userId')
-    //         } else {
-    //             console.log("pas de propriétés dans le localstorage!")
-    //             return {}
-    //         }
-    //     }
-    // }, 
-
     methods: {
         // Déclanche la personnalisation du post pour la fonction modification 
         switchToModify(){

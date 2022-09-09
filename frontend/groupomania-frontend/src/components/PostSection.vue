@@ -3,8 +3,8 @@
         <!-- header -->
             <div class="head">
                 <div class="head-title">
-                    <h2>Bonjour ...</h2>
-                    <h3>Voici les derniers posts publiés</h3>
+                    <h2>Bonjour &nbsp; {{userInfo.pseudo}}</h2>
+                    <h3>Voici les derniers posts publiés: </h3>
                 </div>
             </div>
 
@@ -27,12 +27,13 @@ export default ({
     data(){
         return {
             allPosts: ref([]),
+            userInfo: "", 
             message: "", 
             file: null,
         }
     },
 
-    async mounted(){
+     async created(){
         try {
         // requête Get --- récupération des posts
             await axios.get('http://localhost:3000/api/posts')
@@ -40,14 +41,31 @@ export default ({
                 for(const getPosts of response.data){
                     this.allPosts.push(getPosts); 
                 }
-                console.log(response)
             })  
         }
         
         catch(error){
             console.log(error)
         }   
-    },  
+    }, 
+    
+    async mounted (){
+        try {
+            // récupération de l'userId auprès du localstorage nécessaire pour notre requête
+            const Id = localStorage.getItem('userId');
+
+            // requête Get avec Id pour récupérer les infos utilisateurs
+            await axios.get(`http://localhost:3000/api/user/${Id}`)
+            .then((res) => {
+                this.userInfo = res.data;   
+            })  
+           
+        }
+         catch(error){
+            console.log(error)
+         }
+
+    }, 
 
     components : {
         "posts" : Posts
@@ -63,14 +81,23 @@ export default ({
     border-radius: 15px; 
     width: 70%; 
 }
+
 .get-post h2 {
+    display: flex; 
+    margin: 0; 
+    gap: 15px; 
     font-size: 20px;
     font-weight: bold;
-    color:#FD2D01;
+    color: #4E5166;
+    background: lightgrey; 
+    padding: 20px; 
+    border-radius: 15px;
 }
+
 .get-post h3 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
+    padding: 25px 0;
 }
 
 @media screen and (max-width: 750px) {

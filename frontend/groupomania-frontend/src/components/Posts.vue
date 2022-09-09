@@ -1,5 +1,5 @@
 <template >
-    <div class = "Post-body" >
+    <div class = "post-body" >
         <div class="head-post">
             <div class = "head-post-title">
                 <h3>{{ postsInfos.user.pseudo }}</h3>
@@ -75,16 +75,17 @@ export default({
             like: "", 
         }
     }, 
-     computed : {
-        userId(){
-            if(localStorage.getItem('userId')){
-                return localStorage.getItem('userId')
-            } else {
-                console.log("pas de propriétés dans le localstorage!")
-                return {}
-            }
-        }
-    }, 
+    
+    //  computed : {
+    //     userId(){
+    //         if(localStorage.getItem('userId')){
+    //             return localStorage.getItem('userId')
+    //         } else {
+    //             console.log("pas de propriétés dans le localstorage!")
+    //             return {}
+    //         }
+    //     }
+    // }, 
 
     methods: {
         // Déclanche la personnalisation du post pour la fonction modification 

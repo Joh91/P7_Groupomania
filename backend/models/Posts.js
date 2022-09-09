@@ -9,10 +9,10 @@ const PostsSchema = mongoose.Schema({
     file: {type: String},
     like: {type: Number, default: 0}, 
     likers: {type: [String]}, 
-    user: {
+    user: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
-     }
+     }]
 },
 {
     timestamps: true, 

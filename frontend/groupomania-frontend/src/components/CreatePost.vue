@@ -63,11 +63,11 @@ export default ({
     margin: 60px auto; 
     padding: 50px; 
     border-radius: 15px; 
-    width: 90%; 
+    width: 70%; 
     }
     .add-post h2 {
         font-weight: bold;
-        font-size: 24px;
+        font-size: 20px;
         color:#FD2D01;
     }
     .head {
@@ -83,8 +83,8 @@ export default ({
         font-size: 18px;
     }
     .create-post {
-        border: 1px solid lightgrey;
-        background: rgb(249, 249, 249); 
+        background: #fff;
+        border: none; 
         padding: 10px; 
     }
     .card {
@@ -98,6 +98,24 @@ export default ({
     button:hover{
         background: #FD2D01; 
         border-color: #FD2D01; 
+    }
+
+    @media screen and (max-width: 750px) {
+        .add-post { 
+            width: 90%; 
+            padding: 50px 20px; 
+        }
+
+        .form-label {
+            font-size: 14px;
+            display: flex; 
+            justify-content: flex-start;
+        }
+
+        .form-control {
+            font-size: 14px; 
+        }
+    
     }
 
 </style>

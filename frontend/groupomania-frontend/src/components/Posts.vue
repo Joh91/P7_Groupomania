@@ -2,8 +2,8 @@
     <div class = "Post-body" >
         <div class="head-post">
             <div class = "head-post-title">
-                <!-- <h3 >{{ postsInfos.user.pseudo}}</h3> -->
-                <h4>{{ postsInfos.createdAt}}</h4> 
+                <h3>{{ userId }}</h3>
+                <!-- <h4>{{ postsInfos.createdAt}}</h4>  -->
             </div>
             <!-- nav: modifier / supprimer -->
             <div class="dropdown">
@@ -24,8 +24,9 @@
                 <div class="card-body">
                     <p class="card-text"> {{ postsInfos.message }}</p>
                     <div class="foot">
-                        <router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="getLiked">
-                            <i class="fa-solid fa-thumbs-up"></i>
+                         <router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="getLiked">
+                            <i class="fa-solid fa-thumbs-up unliked" v-if="like == ''"></i>
+                            <i class="fa-solid fa-thumbs-up liked" v-else></i>
                         </router-link>
                         <span class="like">{{ postsInfos.like }}</span>
                     </div>
@@ -45,7 +46,7 @@
                     <input class="form-control" type="file" id="selectfile" @change="newFile" ref="file">
                 </div>
                 
-                <button type="submit" class="btn btn-primary" @click="returnToHome()">Annuler</button>
+                <button type="submit" class="btn btn-primary" @click="refresh()">Annuler</button>
                 <button type="submit" class="btn btn-primary">Modifier</button>
             </form>
         </div>
@@ -73,7 +74,18 @@ export default({
             file: null,
             like: "", 
         }
-    },  
+    }, 
+     computed : {
+        userId(){
+            if(localStorage.getItem('userId')){
+                return localStorage.getItem('userId')
+            } else {
+                console.log("pas de propriétés dans le localstorage!")
+                return {}
+            }
+        }
+    }, 
+
     methods: {
         // Déclanche la personnalisation du post pour la fonction modification 
         switchToModify(){
@@ -84,6 +96,15 @@ export default({
         switchToDelete(){
             this.mode = "delete"
         },
+        // Retour à la page d'accueil 
+        returnToHome(){
+            this.$router.push('/home')
+        },
+
+        // refresh page 
+        refresh(){
+            window.location.reload()
+        }, 
 
         // Chargement d'un fichier depuis input-file 
         newFile(){
@@ -109,7 +130,6 @@ export default({
                 if( this.message != ""){
                      await axios.put(`http://localhost:3000/api/posts/${Id}`, newData)
                     .then((response) => {
-                        this.$route.push('/home')
                         console.log("test1", response)
                         console.log("test data", newData)
                         console.log("post modifié")
@@ -131,7 +151,6 @@ export default({
                 // Appel à l'Api
                await axios.delete(`http://localhost:3000/api/posts/${Id}`)
                .then(() => {
-                this.$route.push('/home')
                 console.log("post supprimé")
                })
             } catch (error){
@@ -139,22 +158,57 @@ export default({
             }
         },
 
+        // requête Like 
         async getLiked(){
              try {
                 // Récupération de l'id depuis l'URL 
                 let Id = this.$route.params.id; 
                 console.log("test Id", Id); 
 
+                // Définition de l'objet 
+                const userId = localStorage.getItem('userId');
+                let data = {
+                    userId: userId
+                }
+                console.log("data", data)
+
                 // Appel à l'Api
-               await axios.post(`http://localhost:3000/api/posts/like/${Id}`)
+               await axios.post(`http://localhost:3000/api/posts/like/${Id}`, data)
                .then(() => {
-                this.returnToHome();
+                this.like = "";
                 console.log("post liké")
+                
                })
             } catch (error){
                 console.log(error)
             }
-        }
+        },
+
+        // requête unlike
+        // async getUnlike(){
+        //      try {
+        //         Récupération de l'id depuis l'URL 
+        //         let Id = this.$route.params.id; 
+        //         console.log("test Id", Id); 
+
+        //         Définition de l'objet 
+        //         const userId = localStorage.getItem('userId');
+        //         let data = {
+        //             userId: userId
+        //         }
+        //         console.log("data", data)
+
+        //         Appel à l'Api
+        //        await axios.post(`http://localhost:3000/api/posts/unlike/${Id}`, data)
+        //        .then(() => {
+        //         this.liked = "";
+        //         console.log("like supprimé")
+                
+        //        })
+        //     } catch (error){
+        //         console.log(error)
+        //     }
+        // }
     }, 
 })
 </script>
@@ -192,18 +246,19 @@ export default({
 }
 
 .post-img {
-    height: 300px; 
+    height: 250px; 
     width: 100%; 
     object-fit: cover;
 }
 
 /* Personnalisation du footer du Post */
 /* icône like */
-.fa-thumbs-up  {
+.unliked {
     font-size: 25px;
     color: #4E5166; 
 }
-.fa-thumbs-up:active {
+.liked {
+    font-size: 25px; 
     color: #FD2D01; 
 }
 
@@ -213,6 +268,31 @@ export default({
     padding-top: 10px; 
     gap: 10px; 
     border-top: 1px solid lightgrey; 
+}
+
+@media screen and (max-width: 550px) {
+    .head-post {
+    padding: 15px 15px 10px; 
+    }
+
+    .dropdown-toggle {
+        padding: 5px 7px; 
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .post-img {
+        height: 180px; 
+    }
+
+    .card-body {
+        padding: 10px; 
+        font-size: 14px; 
+    }
+
+    .fa-thumbs-up{
+        font-size: 16px; 
+    }
 }
 </style>
 

@@ -63,11 +63,9 @@ export default ({
             await axios.delete(`http://localhost:3000/api/user/${Id}`)
             .then(() => {
                 console.log("compte supprimé")
-                //  this.$router.push('/users')
             })
             } catch (error){
                 console.log(error)
-                // this.$router.push('/users')
             }
         },
     }

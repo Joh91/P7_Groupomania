@@ -11,10 +11,23 @@
             <div class="body">
                 <div class="userInfos" >
                     <h2>{{ allUsers.pseudo }}</h2>
-                    <h3>{{ allUsers.email }}</h3>
+                    <h3 class= "userInfos-title">Votre compte est actif depuis le :</h3> 
+                    <h3 class="userInfos-content">{{ allUsers.createdAt}}</h3>
+                    <h3 class="userInfos-title">Votre adresse mail:</h3> 
+                    <h3 class="userInfos-content">{{ allUsers.email }}</h3>
                 </div>
-                <div class="admin-control">
-                    <button type="submit" class="btn btn-primary">Supprimer</button>
+                <div class="profil-control" v-if="mode == 'info'">
+                    <span>Supprimer mon compte</span>
+                    <button type="submit" class="btn btn-primary btn-delete" @click="switchToDelete">Supprimer</button>
+                </div>
+                <div class="profil-control" v-else>
+                    <form class="form-delete" @submit='deleteCount'>
+                        <span>Attention cette procédure est définitive:</span>
+                        <div class="button-direction">
+                            <button type="submit" class="btn btn-primary btn-cancel" @click="cancel">Annuler</button>
+                            <button type="submit" class="btn btn-primary btn-delete">Continuer</button>
+                        </div>
+                    </form>
                 </div>
             </div>
     </section>
@@ -26,7 +39,8 @@ export default ({
     name: "UserProfil", 
     data(){
         return {
-            allUsers: []
+            allUsers: [], 
+            mode: 'info'
         }
     },
 
@@ -49,6 +63,34 @@ export default ({
             console.log(error)
         }  
     }, 
+    methods: {
+        switchToDelete(){
+            this.mode = 'delete'
+        }, 
+
+        cancel(){
+            window.location.reload()
+        }, 
+
+        // requête Delete -- Supprimer un compte
+        async deleteCount(){
+            try {
+                // Récupération de l'id depuis l'URL 
+                let Id = this.$route.params.id; 
+                console.log("test Id", Id); 
+
+                // Appel à l'Api
+            await axios.delete(`http://localhost:3000/api/user/${Id}`)
+            .then(() => {
+                console.log("compte supprimé")
+                // redirection vers l'écran d'accueil
+                 this.$router.push({name: "Connexion"})
+            })
+            } catch (error){
+                console.log(error)
+            }
+        },
+    }
 })
 </script>
 
@@ -65,10 +107,7 @@ export default ({
     font-weight: bold;
     color:#FD2D01;
 }
-.get-post h3 {
-    font-size: 18px;
-    font-weight: bold;
-}
+
 .title {
     display: flex;
     flex-direction: row; 
@@ -77,11 +116,74 @@ export default ({
 }
 
 .fa-house{
+    font-size: 20px; 
     color: #4E5166; 
     cursor: pointer; 
 }
 
 .fa-house:hover {
     color: #FD2D01; 
+}
+
+/* personnalisation du bloc informations */
+.userInfos{
+    margin: 30px 0; 
+    background: lightgrey;
+    padding: 15px; 
+    border-radius: 15px; 
+}
+
+.userInfos-title {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 20px 0 5px
+}
+
+.userInfos-content {
+    font-size: 16px; 
+}
+
+/* personnalisation du bloc control */
+.profil-control{
+    margin: 30px 0; 
+    background: #FFD7D7;
+    padding: 15px; 
+    border-radius: 15px;
+}
+
+.profil-control{
+    display: flex; 
+    flex-direction: column;
+}
+
+.profil-control span {
+    font-size: 20px; 
+    font-weight: bold;
+}
+
+.btn-delete{
+    width: 15%; 
+    background: #FD2D01; 
+    border: none
+}
+
+.btn-cancel:hover{
+    background: rgb(48, 113, 235);
+    border: none; 
+}
+
+.form-delete{
+    background: #fff; 
+    padding: 15px; 
+
+}
+
+.form-delete span {
+    font-size: 18px; 
+}
+
+.button-direction {
+    display: flex; 
+    gap: 20px; 
 }
 </style>

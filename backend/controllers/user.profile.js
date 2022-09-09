@@ -42,7 +42,7 @@ exports.updateUser = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
    await User.findOne({_id: req.params.id})
     .then (user => {
-        if (user.userId == req.auth.userId || req.admin == true){
+        if (user._id == req.auth.userId || req.admin == true){
             User.deleteOne({_id: req.params.id})
             .then(() => {res.status(200).json({message: "profil supprimé !"})})
             .catch(error => res.status(401).json({ error }));

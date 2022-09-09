@@ -48,14 +48,14 @@ export default ({
 nav {
     background-color: white;
     display: flex; 
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: baseline;
-    padding: 15px 0 15px
+    padding: 15px; 
 
 }
 
 nav img {
-    width: 20%; 
+    width: 200px; 
 }
 
 nav a {
@@ -83,6 +83,24 @@ nav a:hover {
     color: #fff; 
     background: #FD2D01;
     cursor: pointer;
+}
+
+@media screen and (max-width: 620px) {
+    nav {
+        flex-direction: column; 
+        justify-content: center;
+        align-items: center;
+        gap: 10px; 
+    }
+
+    nav a {
+        font-size: 13px; 
+    }
+
+    .logout {
+        padding: 6px 10px ;
+        font-size: 12px; 
+    }
 }
 
 </style>

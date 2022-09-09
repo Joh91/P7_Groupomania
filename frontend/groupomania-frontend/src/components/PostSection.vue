@@ -2,7 +2,7 @@
     <section class="get-post">
         <!-- header -->
             <div class="head">
-                <div class="title">
+                <div class="head-title">
                     <h2>Bonjour ...</h2>
                     <h3>Voici les derniers posts publiés</h3>
                 </div>
@@ -41,6 +41,7 @@ export default ({
                 for(const getPosts of response.data){
                     this.allPosts.push(getPosts); 
                 }
+                console.log(response)
             })  
         }
         
@@ -61,7 +62,7 @@ export default ({
     padding: 50px; 
     margin: 60px auto; 
     border-radius: 15px; 
-    width: 90%; 
+    width: 70%; 
 }
 .get-post h2 {
     font-size: 20px;
@@ -72,10 +73,17 @@ export default ({
     font-size: 18px;
     font-weight: bold;
 }
-.head {
-    display: flex; 
-    justify-content: space-between;
-    align-items: center;
+
+@media screen and (max-width: 750px) {
+    .get-post { 
+        width: 90%; 
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .get-post { 
+        padding: 50px 20px; 
+    }
 }
 
 </style>

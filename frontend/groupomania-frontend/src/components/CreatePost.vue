@@ -5,7 +5,7 @@
             <form class="create-post" @submit="addPost">
                 <div class="mb-3">
                     <label for="message" class="form-label">Message</label>
-                    <textarea  type="text" class="form-control" id="message" style= "height: 130px" v-model='message'></textarea>
+                    <textarea  type="text" class="form-control" id="message"  v-model='message'></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Ajout d'un fichier (JPG, JPEG, PNG, GIF)</label>

@@ -39,24 +39,27 @@
             <form class="create-post" @submit="modifyPost()">
                 <div class="mb-3">
                     <label for="message" class="form-label">Message</label>
-                    <textarea  type="text" class="form-control" id="message" style= "height: 130px" v-model="message"></textarea>
+                    <textarea  type="text" class="form-control" id="message" v-model="message"></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="selectfile" class="form-label">Ajout d'un fichier (JPG, JPEG, PNG, GIF)</label>
                     <input class="form-control" type="file" id="selectfile" @change="newFile" ref="file">
                 </div>
-                
-                <button type="submit" class="btn btn-primary" @click="refresh()">Annuler</button>
-                <button type="submit" class="btn btn-primary">Modifier</button>
+                <div class="btn-position">
+                    <button type="submit" class="btn btn-primary" @click="refresh()">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Modifier</button>
+                </div>
             </form>
         </div>
 
         <!-- corps du post en cas de suppression -->
         <div class="card" v-if="mode == 'delete'">
-            <form @submit="deletePost()">
-                <p>Voulez-vous vraiment supprimer ce post ?</p>
-                <button type="submit" class="btn btn-primary" @click="returnToHome()">Annuler</button>
-                <button type="submit" class="btn btn-primary">Supprimer</button>
+            <form class="create-post" @submit="deletePost()">
+                <p class="form-delete-msg" >Voulez-vous vraiment supprimer ce post ?</p>
+                <div class="btn-position"> 
+                    <button type="submit" class="btn btn-primary" @click="returnToHome()">Annuler</button>
+                    <button type="submit" class="btn btn-primary btn-delete">Supprimer</button>
+                </div>
             </form>
         </div>
     </div>
@@ -241,6 +244,24 @@ export default({
     object-fit: cover;
 }
 
+.create-post {
+    padding: 20px; 
+}
+
+.btn-position {
+    display: flex; 
+    gap: 20px; 
+}
+
+.form-delete-msg{
+    font-weight: bold;
+}
+
+.btn-delete {
+    background: #FD2D01;
+    font-size: 16px; 
+}
+
 /* Personnalisation du footer du Post */
 /* icône like */
 .unliked {
@@ -270,7 +291,11 @@ export default({
     }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 450px) {
+    .head-post-title h3{
+        font-size: 16px; 
+    }
+
     .post-img {
         height: 180px; 
     }
@@ -282,6 +307,14 @@ export default({
 
     .fa-thumbs-up{
         font-size: 16px; 
+    }
+
+    .form-label, .form-control {
+        font-size: 14px;
+    }
+
+    textarea {
+        height: 20px; 
     }
 }
 </style>

@@ -14,7 +14,7 @@
             <div class="body" v-for="user in allUsers" :key="user._id">
                 <div class="userInfos" >
                     <h2>{{user.pseudo}}</h2>
-                    <h3>{{user.createdAt}}</h3>
+                    <h3>Membre depuis le:  &nbsp; {{user.createdAt}}</h3>
                 </div>
                 <div class="options">
                     <router-link :to="{ name:'User', params: {id: user._id} }" class="btn btn-primary">Suivre</router-link>
@@ -112,19 +112,13 @@ export default ({
     /* design */
     margin-top: 40px; 
     background: lightgrey; 
-    padding: 20px; 
+    padding: 0 20px 40px; 
     border-radius: 15px; 
 
     /* disposition  */
     display: flex;
     justify-content: space-between; 
     align-items: flex-start
-}
-
-.userInfos{
-    display: flex; 
-    gap: 30px;
-    align-items: flex-end;
 }
 
 .userInfos h3{
@@ -134,6 +128,42 @@ export default ({
 .options {
     display: flex;
     gap: 15px; 
-    align-items: flex-start;
+    align-self: flex-end;
 }
+
+@media screen and (max-width: 700px) {
+    .get-post {
+        padding: 50px 20px; 
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .body{
+        display: flex; 
+        flex-direction: column;
+    }
+
+    .userInfos {
+        padding: 0
+    }
+}
+
+@media screen and (max-width: 400px) {
+   .get-post h2 {
+        font-size: 16px;
+    }
+
+    .fa-house {
+        font-size: 12px; 
+        padding: 6px
+    }
+
+    .btn {
+        font-size: 14px; 
+        padding: 6px 8px; 
+    }
+
+}
+
+
 </style>

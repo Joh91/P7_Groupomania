@@ -162,7 +162,7 @@ export default ({
 }
 
 .btn-delete{
-    width: 15%; 
+    width: 100px; 
     background: #FD2D01; 
     border: none
 }
@@ -185,5 +185,36 @@ export default ({
 .button-direction {
     display: flex; 
     gap: 20px; 
+}
+
+@media screen and (max-width: 500px) {
+    .get-post {
+        padding: 50px 20px; 
+    }
+
+    .get-post h2 {
+        font-size: 18px;
+    }
+
+    .userInfos h2 {
+        font-size: 18px; 
+    }
+
+    .userInfos-title {
+        font-size: 16px;
+        padding-top: 10px;
+    }
+
+    .userInfos-content {
+        font-size: 14px; 
+    }
+
+    .profil-control span {
+        font-size: 16px; 
+    }
+
+    .btn-delete{
+        font-size: 14px; 
+    }
 }
 </style>

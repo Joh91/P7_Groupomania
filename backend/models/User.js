@@ -18,13 +18,15 @@ const userSchema = mongoose.Schema({
         posts: [{ 
             type: mongoose.Schema.Types.ObjectId,
             ref: "Posts"
-         }]
+        }]
     }, 
     {
         timestamps: true, 
     }
 ); 
 
+const User = mongoose.model("User", userSchema)
+
 userSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model("User", userSchema); 
+module.exports = mongoose.model("User", userSchema), User; 

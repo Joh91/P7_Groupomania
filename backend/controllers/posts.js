@@ -26,21 +26,29 @@ exports.createPosts = async (req, res, next) => {
 }; 
 
 /*---- requête Get ----*/ 
-exports.getPosts = async (req, res, next) => {
+exports.getPosts =  (req, res, next) => {
     //Affichage des posts par ordre chronologique
-   await Posts.find()
-    // .populate('user')
+     Posts.find()
+    .populate('user')
     .sort({ createdAt: -1})
     .then((posts) => {
         User.find()
         .then((users) => {
+            for (const post of posts) {
+                for (const user of users){
+                    if(post.userId == user._id){
+                        post.user = user
+                    }
+                }
+            }
+            console.log(posts)
             res.status(200).json(posts)
         })
         .catch ((error) => {
             res.status(400).json({error})
         })
     })
-    .catch((error) => {res.status(400).json({error})});
+    .catch((error) => {res.status(500).json({error})});
 };
 
 /*---- requête PUT ----*/ 

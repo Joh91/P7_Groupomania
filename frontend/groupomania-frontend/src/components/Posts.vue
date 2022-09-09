@@ -2,7 +2,7 @@
     <div class = "Post-body" >
         <div class="head-post">
             <div class = "head-post-title">
-                <!-- <h3>pseudo user</h3> -->
+                <h3>{{ postsInfos.user.pseudo }}</h3>
                 <!-- <h4>{{ postsInfos.createdAt}}</h4>  -->
             </div>
             <!-- nav: modifier / supprimer -->

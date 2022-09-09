@@ -34,7 +34,6 @@ export default ({
 
     async mounted(){
         try {
-        // configuration du header et du token qui sera retourné lors des requêtes
         // requête Get --- récupération des posts
             await axios.get('http://localhost:3000/api/posts')
             .then((response) => {

@@ -9,14 +9,16 @@ const PostsSchema = mongoose.Schema({
     file: {type: String},
     like: {type: Number, default: 0}, 
     likers: {type: [String]}, 
-    user: [{
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
-     }]
+    }
 },
 {
     timestamps: true, 
 }
 );
 
-module.exports = mongoose.model("Posts", PostsSchema); 
+const Posts = mongoose.model("Posts", PostsSchema)
+
+module.exports = mongoose.model("Posts", PostsSchema), Posts; 

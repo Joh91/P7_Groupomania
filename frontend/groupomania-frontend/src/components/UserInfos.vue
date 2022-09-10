@@ -11,16 +11,16 @@
                 </div>
             </div>
 
-            <div class="body" v-for="user in allUsers" :key="user._id">
-                <div class="userInfos" >
-                    <h2>{{user.pseudo}}</h2>
-                    <h3>Membre depuis le:  &nbsp; {{user.createdAt}}</h3>
+            <div class="body"  v-for="user in allUsers" :key="user._id">
+                    <div class="userInfos">
+                        <h2>{{user.pseudo}}</h2>
+                        <h3>Membre depuis le:  &nbsp; {{user.createdAt}}</h3>
+                    </div>
+                    <div class="options" v-if="user._id !== userId">
+                        <button class="btn btn-primary">Suivre</button>
+                        <button class="btn btn-primary" @click="deleteCount(user)" v-if="isAdmin == 'true' ">Supprimer</button>
+                    </div>
                 </div>
-                <div class="options">
-                    <router-link :to="{ name:'User', params: {id: user._id} }" class="btn btn-primary">Suivre</router-link>
-                    <router-link :to="{ name:'User', params: {id: user._id} }" class="btn btn-primary" @click="deleteCount">Supprimer</router-link>
-                </div>
-            </div>
     </section>
 </template>
 
@@ -31,6 +31,8 @@ export default ({
      data(){
         return {
             allUsers: [],
+            isAdmin: localStorage.getItem('admin'),
+            userId: localStorage.getItem('userId')
         }
     },
 
@@ -53,16 +55,16 @@ export default ({
 
     methods: {
         // requête Delete -- Supprimer un compte
-        async deleteCount(){
+        async deleteCount(user){
             try {
-                // Récupération de l'id depuis l'URL 
-                let Id = this.$route.params.id; 
-                console.log("test Id", Id); 
+                // récupération de l'id depuis postsInfos 
+                let Id = user._id 
 
                 // Appel à l'Api
             await axios.delete(`http://localhost:3000/api/user/${Id}`)
             .then(() => {
                 console.log("compte supprimé")
+                window.location.reload()
             })
             } catch (error){
                 console.log(error)
@@ -129,6 +131,12 @@ export default ({
     display: flex;
     gap: 15px; 
     align-self: flex-end;
+}
+
+.user {
+    display: none;
+    padding: 0; 
+    margin: 0; 
 }
 
 @media screen and (max-width: 700px) {

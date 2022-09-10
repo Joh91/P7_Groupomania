@@ -3,7 +3,7 @@
         <!-- header -->
             <div class="head">
                 <div class="head-title">
-                    <h2>Bonjour &nbsp; {{userInfo.pseudo}}</h2>
+                    <h2>Bonjour  {{userInfo.pseudo}}</h2>
                     <h3>Voici les derniers posts publiés: </h3>
                 </div>
             </div>
@@ -32,30 +32,13 @@ export default ({
             file: null,
         }
     },
-
-     async mounted(){
-        try {
-        // requête Get --- récupération des posts
-            await axios.get('http://localhost:3000/api/posts')
-            .then((response) => {
-                for(const getPosts of response.data){
-                    this.allPosts.push(getPosts); 
-                }
-            })  
-        }
-        
-        catch(error){
-            console.log(error)
-        }   
-    }, 
-    
-    async created(){
+    created(){
         try {
             // récupération de l'userId auprès du localstorage nécessaire pour notre requête
             const Id = localStorage.getItem('userId');
 
             // requête Get avec Id pour récupérer les infos utilisateurs
-            await axios.get(`http://localhost:3000/api/user/${Id}`)
+            axios.get(`http://localhost:3000/api/user/${Id}`)
             .then((res) => {
                 this.userInfo = res.data;   
             })  
@@ -67,6 +50,24 @@ export default ({
 
     }, 
 
+    mounted(){
+        try {
+        // requête Get --- récupération des posts
+            axios.get('http://localhost:3000/api/posts')
+            .then((response) => {
+                for(const getPosts of response.data){
+                    this.allPosts.push(getPosts); 
+                }
+                
+            })  
+        }
+        
+        catch(error){
+            console.log(error)
+        }   
+    }, 
+    
+    
     components : {
         "posts" : Posts
     }

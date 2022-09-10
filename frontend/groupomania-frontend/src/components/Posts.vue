@@ -2,7 +2,7 @@
     <div class = "post-body" >
         <div class="head-post">
             <div class = "head-post-title">
-                <h3>{{ postsInfos.user.pseudo }}</h3>
+                <!-- <h3>{{ postsInfos.user.pseudo }}</h3> -->
                 <!-- <h4>{{ postsInfos.createdAt}}</h4>  -->
             </div>
             <!-- nav: modifier / supprimer -->
@@ -11,8 +11,9 @@
                     <i class="fa-solid fa-gear"></i>
                 </button>
                 <ul class="dropdown-menu" >
-                    <li><router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="switchToModify">Modifier</router-link></li>
-                    <li><router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="switchToDelete">Supprimer</router-link></li>
+                    <!-- <li><router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="switchToModify(postsInfos)">Modifier</router-link></li> -->
+                    <li><button class="dropdown-item" @click="switchToModify(postsInfos)">Modifier</button></li>
+                    <li><button class="dropdown-item" @click="switchToDelete(postsInfos)">Supprimer</button></li>
                 </ul>
             </div>
         </div>
@@ -24,10 +25,10 @@
                 <div class="card-body">
                     <p class="card-text"> {{ postsInfos.message }}</p>
                     <div class="foot">
-                         <router-link :to="{ name:'Post', params: {id: postsInfos._id} }" class="dropdown-item" @click="getLiked">
+                         <button class="dropdown-item" @click="getLiked(postsInfos)">
                             <i class="fa-solid fa-thumbs-up unliked" v-if="like == ''"></i>
                             <i class="fa-solid fa-thumbs-up liked" v-else></i>
-                        </router-link>
+                        </button>
                         <span class="like">{{ postsInfos.like }}</span>
                     </div>
                 </div>
@@ -36,7 +37,7 @@
 
         <!-- corps du post en cas de modification -->
         <div class="card" v-if="mode == 'modify'">
-            <form class="create-post" @submit="modifyPost()">
+            <form class="create-post" >
                 <div class="mb-3">
                     <label for="message" class="form-label">Message</label>
                     <textarea  type="text" class="form-control" id="message" v-model="message"></textarea>
@@ -47,18 +48,18 @@
                 </div>
                 <div class="btn-position">
                     <button type="submit" class="btn btn-primary" @click="refresh()">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <button type="submit" class="btn btn-primary" @click="modifyPost(postsInfos)">Modifier</button>
                 </div>
             </form>
         </div>
 
         <!-- corps du post en cas de suppression -->
         <div class="card" v-if="mode == 'delete'">
-            <form class="create-post" @submit="deletePost()">
+            <form class="create-post">
                 <p class="form-delete-msg" >Voulez-vous vraiment supprimer ce post ?</p>
                 <div class="btn-position"> 
-                    <button type="submit" class="btn btn-primary" @click="returnToHome()">Annuler</button>
-                    <button type="submit" class="btn btn-primary btn-delete">Supprimer</button>
+                    <button type="submit" class="btn btn-primary" @click="refresh()">Annuler</button>
+                    <button type="submit" class="btn btn-primary btn-delete" @click="deletePost(postsInfos)">Supprimer</button>
                 </div>
             </form>
         </div>
@@ -108,13 +109,13 @@ export default({
         },
 
         // requête Put -- Modifier un post 
-       async modifyPost(){
+       async modifyPost(postsInfos){
             try {
-                // Récupération de l'id depuis l'URL 
-                let Id = this.$route.params.id; 
-                console.log("test Id", Id); 
+            
+                // récupération de l'id depuis postsInfos 
+                let Id = postsInfos._id
 
-                // Creation de du Fomr-Data à retourner
+                // Creation de du Form-Data à retourner
                 let newData = new FormData();
                 newData.append("message", this.message);
                 newData.append("image", this.file);
@@ -135,11 +136,10 @@ export default({
         },
 
         // requête Delete -- Supprimer un post
-       async deletePost(){
+       async deletePost(postsInfos){
             try {
-                // Récupération de l'id depuis l'URL 
-                let Id = this.$route.params.id; 
-                console.log("test Id", Id); 
+                // récupération de l'id depuis postsInfos 
+                let Id = postsInfos._id
 
                 // Appel à l'Api
                await axios.delete(`http://localhost:3000/api/posts/${Id}`)
@@ -152,18 +152,14 @@ export default({
         },
 
         // requête Like 
-        async getLiked(){
+        async getLiked(postsInfos){
              try {
-                // Récupération de l'id depuis l'URL 
-                let Id = this.$route.params.id; 
-                console.log("test Id", Id); 
+                // récupération de l'id depuis postsInfos 
+                let Id = postsInfos._id
 
                 // Définition de l'objet 
                 const userId = localStorage.getItem('userId');
-                let data = {
-                    userId: userId
-                }
-                console.log("data", data)
+                let data = { userId: userId }
 
                 // Appel à l'Api
                await axios.post(`http://localhost:3000/api/posts/like/${Id}`, data)

@@ -34,7 +34,7 @@ export default ({
         /* --  methode de deconnexion -- 
         1. suppression du token présent dans le localstorage
         2. retour à la page de connexion */
-        logout () {
+        logout() {
             localStorage.removeItem('token');
             localStorage.removeItem("userId");
             this.$router.push('/')

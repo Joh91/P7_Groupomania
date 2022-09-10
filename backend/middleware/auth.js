@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
         //récupération du Token 
         const token = req.headers.authorization.split(' ')[1];
         //décodage du Token 
-        const decodedToken = jwt.verify(token, process.env.TOKEN_PASSWORD);
+        const decodedToken = jwt.verify(token, `${process.env.TOKEN_PASSWORD}`);
         const userId = decodedToken.userId; 
         const admin = decodedToken.admin 
         req.auth = {
@@ -19,8 +19,8 @@ module.exports = (req, res, next) => {
         } else {
             req.user = userId;
             req.admin = admin;
-            next();
         }
+        next();
     } catch (error) {
         res.status(401).json({error}); 
     }
